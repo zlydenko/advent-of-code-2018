@@ -1,6 +1,6 @@
 import { scanBoxId, boxIdChecksum } from "../solution-pt1";
 
-describe("inventory management system testcases", () => {
+describe("inventory management system pt.1 testcases", () => {
   const testData = ["abcdef", "bababc", "abbcde", "abcccd", "aabcdd", "abcdee", "ababab"];
 
   test("1. contains no letters that appear exactly two or three times", () => {
