@@ -42,7 +42,6 @@ const findDuplicateFrequency = (inputData: string[], startingPoint: number): num
   const inputDataLen: number = inputData.length;
   let frequencies: number[] = [];
   let duplicateFound: boolean = false;
-  let iterationCycle: number = 1;
   let duplicate: number = 0;
 
   while (!duplicateFound) {
@@ -67,13 +66,6 @@ const findDuplicateFrequency = (inputData: string[], startingPoint: number): num
 
   return duplicate;
 };
-
-extractInputData(inputFilePath)
-  .then(res => {
-    const x = findDuplicateFrequency(res, STARTING_FREQUENCY);
-    console.log(x);
-  })
-  .catch(e => console.log(e));
 
 const partTwo = () => {
   extractInputData(inputFilePath)
