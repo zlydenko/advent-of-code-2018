@@ -12,7 +12,7 @@ const inputLoader = (): Promise<Buffer> =>
     });
   });
 
-module.exports = async (): Promise<string[]> => {
+export default async function(): Promise<string[]> {
   try {
     const data: Buffer = await inputLoader();
     const dataInString: string = data.toString();
@@ -22,4 +22,4 @@ module.exports = async (): Promise<string[]> => {
   } catch (exception) {
     throw new Error(`Failed to load input data. ${exception.message}`);
   }
-};
+}
