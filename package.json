@@ -4,9 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "ts:w": "tsc -w",
+    "start": "node -r esm day-one/src"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^11.12.2"
+  },
+  "dependencies": {
+    "esm": "^3.2.22"
+  }
 }
