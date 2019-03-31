@@ -27,9 +27,62 @@ const chronalCalibration = async (pathToInput: string, startingPoint: number): P
   }
 };
 
-chronalCalibration(inputFilePath, STARTING_FREQUENCY)
-  .then(result => console.log(`Resulting frequency: ${result}`))
-  .catch(error => {
-    console.log("Some troubles occured");
-    console.error(error);
-  });
+const partOne = () => {
+  chronalCalibration(inputFilePath, STARTING_FREQUENCY)
+    .then(result => console.log(`Resulting frequency: ${result}`))
+    .catch(error => {
+      console.log("Some troubles occured");
+      console.error(error);
+    });
+};
+
+//? PART TWO
+
+const findDuplicateFrequency = (inputData: string[], startingPoint: number): number => {
+  const inputDataLen: number = inputData.length;
+  let frequencies: number[] = [];
+  let duplicateFound: boolean = false;
+  let iterationCycle: number = 1;
+  let duplicate: number = 0;
+
+  while (!duplicateFound) {
+    for (let i = 0; i < inputDataLen; i++) {
+      const prevValue: number = frequencies[frequencies.length - 1] ? frequencies[frequencies.length - 1] : startingPoint;
+      const currentValue: number = prevValue + Number(inputData[i]);
+      const haveDuplicate: boolean = frequencies.find(x => x === currentValue) !== undefined;
+
+      if (haveDuplicate) {
+        duplicate = currentValue;
+        duplicateFound = true;
+        break;
+      } else {
+        frequencies.push(currentValue);
+      }
+    }
+
+    if (duplicateFound) {
+      break;
+    }
+  }
+
+  return duplicate;
+};
+
+extractInputData(inputFilePath)
+  .then(res => {
+    const x = findDuplicateFrequency(res, STARTING_FREQUENCY);
+    console.log(x);
+  })
+  .catch(e => console.log(e));
+
+const partTwo = () => {
+  extractInputData(inputFilePath)
+    .then(res => {
+      const result = findDuplicateFrequency(res, STARTING_FREQUENCY);
+      console.log(`Resulting frequency: ${result}`);
+    })
+    .catch(error => {
+      console.log("Some troubles occured");
+      console.error(error);
+    });
+};
