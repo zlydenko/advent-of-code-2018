@@ -23,5 +23,19 @@ export const scanBoxId = (id: string): [number, number] => {
 };
 
 export const boxIdChecksum = (input: string[]): number => {
-  return 12;
+  const scanningResult: Array<[number, number]> = input.map((boxId: string) => scanBoxId(boxId));
+
+  //? typescript is yelling on me about making acc, val, and result of duplicatesCounter of type [number,number]
+  //? little annoying shit
+
+  const checksumReducer = (acc: number[], value: number[]) => [acc[0] + value[0], acc[1] + value[1]];
+  const duplicatesCounter: number[] = scanningResult.reduce(checksumReducer, [0, 0]);
+  const checksum: number = duplicatesCounter[0] * duplicatesCounter[1];
+
+  return checksum;
 };
+
+inputData().then(input => {
+  const solutionAnswer = boxIdChecksum(input);
+  console.log(`Answer is: ${solutionAnswer}`);
+});
