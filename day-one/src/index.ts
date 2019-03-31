@@ -38,15 +38,15 @@ const partOne = () => {
 
 //? PART TWO
 
-const findDuplicateFrequency = (inputData: string[], startingPoint: number): number => {
+export const findDuplicateFrequency = (inputData: string[], startingPoint: number): number => {
   const inputDataLen: number = inputData.length;
-  let frequencies: number[] = [];
+  let frequencies: number[] = [startingPoint];
   let duplicateFound: boolean = false;
   let duplicate: number = 0;
 
   while (!duplicateFound) {
     for (let i = 0; i < inputDataLen; i++) {
-      const prevValue: number = frequencies[frequencies.length - 1] ? frequencies[frequencies.length - 1] : startingPoint;
+      const prevValue: number = frequencies[frequencies.length - 1];
       const currentValue: number = prevValue + Number(inputData[i]);
       const haveDuplicate: boolean = frequencies.find(x => x === currentValue) !== undefined;
 
