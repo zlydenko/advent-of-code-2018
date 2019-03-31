@@ -5,15 +5,23 @@
   "main": "index.js",
   "scripts": {
     "ts:w": "tsc -w",
-    "start": "node -r esm day-one/src"
+    "start": "node -r esm day-one/src",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^11.12.2"
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.12.2",
+    "jest": "^24.5.0",
+    "ts-jest": "^24.0.1",
+    "typescript": "^3.4.1"
   },
   "dependencies": {
     "esm": "^3.2.22"
+  },
+  "jest": {
+    "preset": "ts-jest"
   }
 }
