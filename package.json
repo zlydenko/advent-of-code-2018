@@ -6,7 +6,7 @@
   "scripts": {
     "ts:w": "tsc -w",
     "start": "node -r esm day-two/src/solution-pt2",
-    "test": "jest day-two/src/__tests__/solution-pt2.spec.ts"
+    "test": "jest day-three/src/__tests__/solution-pt1.spec.ts"
   },
   "keywords": [],
   "author": "",
