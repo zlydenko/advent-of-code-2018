@@ -7,38 +7,42 @@ export const differedLetters = (first: string, second: string): number => {
   return differCharacters.length;
 };
 
-export const findLikelyPairsId = (testingId: string, testingIdIdx: number, allIds: string[]) => {
-  return [
-    ...allIds
-      .map((comparingId: string, comparingIdIdx: number) => {
-        if (comparingIdIdx === testingIdIdx) return null;
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
 
-        const difference = differedLetters(testingId, comparingId);
-        const approvedDiffer = difference <= testingId.length - 1;
-        return approvedDiffer ? [testingId, comparingId, difference] : null;
-      })
-      .filter(value => value !== null)
-  ];
+export const findLikelyPairsId = (testingId: string, testingIdIdx: number, allIds: string[]): (string | number)[][] => {
+  const result = allIds
+    .map((comparingId: string, comparingIdIdx: number) => {
+      if (comparingIdIdx === testingIdIdx) return null;
+
+      const difference: number = differedLetters(testingId, comparingId);
+      const approvedDiffer: boolean = difference <= testingId.length - 1;
+      return approvedDiffer ? [testingId, comparingId, difference] : null;
+    })
+    .filter(notEmpty);
+
+  return result;
 };
 
-export const findCorrectBoxesId = (ids: string[]): [string, string] => {
-  let likelyList: Array<[string, string, number]> = [];
+export const likelyListReducer = (acc: any[], value: any[]): (string | number)[] => {
+  return acc[2] ? (acc[2] > value[2] ? [...value] : [...acc]) : [...value];
+};
 
-  ids.forEach((id: string, idx: number) => {
-    const likelyPairs = ids
-      .map((comparingId: string, comparingIdIdx: number) => {
-        if (comparingIdIdx === idx) return null;
+export const findCorrectBoxesId = (ids: string[]) => {
+  let likelyList: (string | number)[][] = ids.map((value: string, idx: number) => {
+    const allLikelyVariants: (string | number)[][] = findLikelyPairsId(value, idx, ids);
+    const reduced: (string | number)[] = allLikelyVariants.reduce(likelyListReducer, []);
 
-        const similarity = differedLetters(id, comparingId);
-
-        return similarity >= 1 ? [id, comparingId, similarity] : null;
-      })
-      .filter(value => value !== null);
+    return reduced;
   });
 
-  return ["hello", "world"];
+  const result = likelyList.map(([first, second, _diff]) => [first, second]);
+
+  // return ["asdas"];
+  return result.flat(1);
 };
 
-export const commonLetters = (ids: [string, string]): string => {
+export const commonLetters = (ids: any): string => {
   return "oopsie";
 };

@@ -1,4 +1,4 @@
-import { findLikelyPairsId, differedLetters, findCorrectBoxesId, commonLetters } from "../solution-pt2";
+import { likelyListReducer, findLikelyPairsId, differedLetters, findCorrectBoxesId, commonLetters } from "../solution-pt2";
 
 describe("inventory management system pt.2 testcases", () => {
   const testData = ["abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"];
@@ -13,6 +13,14 @@ describe("inventory management system pt.2 testcases", () => {
     const entryData = findLikelyPairsId(testData[1], 0, [testData[1], testData[2], testData[3], testData[4]]);
     const expectedResult = [[testData[1], testData[4], 1]];
     expect(entryData).toEqual(expectedResult);
+  });
+
+  test("must properly reduce finalists", () => {
+    const DEFAULT: [] = [];
+    const input = [["x", "y", 6], ["w", "v", 3], ["z", "b", 7], ["y", "i", 1]];
+    const output = ["y", "i", 1];
+
+    expect(input.reduce(likelyListReducer, DEFAULT)).toEqual(output);
   });
 
   test("all letters isnt match", () => {
