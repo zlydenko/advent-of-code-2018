@@ -1,48 +1,69 @@
-export const differedLetters = (first: string, second: string): number => {
-  const splittedFirst = first.split("");
-  const splittedSecond = second.split("");
-
-  const differCharacters = splittedFirst.filter((character, idx) => splittedSecond[idx] !== character);
-
-  return differCharacters.length;
-};
-
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
 }
 
-export const findLikelyPairsId = (testingId: string, testingIdIdx: number, allIds: string[]): (string | number)[][] => {
-  const result = allIds
-    .map((comparingId: string, comparingIdIdx: number) => {
-      if (comparingIdIdx === testingIdIdx) return null;
+export const findDifferChars = (first: string, second: string): string[] => {
+  const firstLetters: string[] = first.split("");
+  const secondLetters: string[] = second.split("");
 
-      const difference: number = differedLetters(testingId, comparingId);
-      const approvedDiffer: boolean = difference <= testingId.length - 1;
-      return approvedDiffer ? [testingId, comparingId, difference] : null;
-    })
-    .filter(notEmpty);
+  const allUnique: Set<string> = new Set([...firstLetters, ...secondLetters]);
+
+  let result: string[] = [];
+
+  allUnique.forEach(value => {
+    if (
+      (firstLetters.includes(value) && !secondLetters.includes(value)) ||
+      (!firstLetters.includes(value) && secondLetters.includes(value))
+    ) {
+      result.push(value);
+    }
+  });
 
   return result;
 };
 
-export const likelyListReducer = (acc: any[], value: any[]): (string | number)[] => {
-  return acc[2] ? (acc[2] > value[2] ? [...value] : [...acc]) : [...value];
+export const sliceDiffer = (input: string, chars: string[]): string => {
+  return input
+    .split("")
+    .filter(letter => !chars.includes(letter))
+    .join("");
 };
 
-export const findCorrectBoxesId = (ids: string[]) => {
-  let likelyList: (string | number)[][] = ids.map((value: string, idx: number) => {
-    const allLikelyVariants: (string | number)[][] = findLikelyPairsId(value, idx, ids);
-    const reduced: (string | number)[] = allLikelyVariants.reduce(likelyListReducer, []);
+interface Answer {
+  ids: string[];
+  commonCharacters: string;
+}
 
-    return reduced;
+export const findCorrectBoxIds = (ids: string[]): string[] => {
+  let result: string[] = [];
+
+  ids.forEach((currentId: string, idx: number, allIds: string[]) => {
+    const testingIds = allIds.slice(idx);
+    const correctBoxIds: string[] = testingIds.reduce((acc: string[], testedId: string) => {
+      console.log(`testing value ${currentId} and ${testedId}`);
+      const differChars = findDifferChars(currentId, testedId);
+      console.log(`count of differ chars: ${differChars.length / 2}`);
+      const isValid = differChars.length / 2 === 1;
+      return isValid ? [currentId, testedId] : acc;
+    }, []);
+
+    if (correctBoxIds.length > 0) {
+      result = correctBoxIds;
+      console.log("result found, breaking loop");
+      return;
+    }
   });
 
-  const result = likelyList.map(([first, second, _diff]) => [first, second]);
-
-  // return ["asdas"];
-  return result.flat(1);
+  return result;
 };
 
-export const commonLetters = (ids: any): string => {
-  return "oopsie";
+export const findSolution = (data: string[]): Answer => {
+  const [firstId, secondId] = findCorrectBoxIds(data);
+  const differCharacters = findDifferChars(firstId, secondId);
+  const commonCharacters = sliceDiffer(firstId, differCharacters);
+
+  return {
+    ids: [firstId, secondId],
+    commonCharacters
+  };
 };

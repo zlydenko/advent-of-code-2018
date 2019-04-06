@@ -1,46 +1,47 @@
-import { likelyListReducer, findLikelyPairsId, differedLetters, findCorrectBoxesId, commonLetters } from "../solution-pt2";
+import { findSolution, findDifferChars, sliceDiffer, findCorrectBoxIds } from "../solution-pt2";
+import inputData from "../inputLoader";
 
 describe("inventory management system pt.2 testcases", () => {
   const testData = ["abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"];
 
-  test("must find likely pair with 2 differ characters", () => {
-    const entryData = findLikelyPairsId(testData[0], 0, [testData[0], testData[4], testData[5]]);
-    const expectedResult = [[testData[0], testData[5], 2]];
-    expect(entryData).toEqual(expectedResult);
+  test("it must find differ characters", () => {
+    const first = testData[0];
+    const second = testData[5];
+    const differ = findDifferChars(first, second);
+    const output = ["x", "y", "b", "d"];
+
+    expect(differ).toEqual(expect.arrayContaining(output));
   });
 
-  test("must find likely pair with 1 differ character", () => {
-    const entryData = findLikelyPairsId(testData[1], 0, [testData[1], testData[2], testData[3], testData[4]]);
-    const expectedResult = [[testData[1], testData[4], 1]];
-    expect(entryData).toEqual(expectedResult);
+  test("it must slice differ chars", () => {
+    const chars = ["x", "y", "b", "d"];
+    const firstInput = testData[0];
+    const secondInput = testData[5];
+
+    const firstOutput = "ace";
+    const secondOutput = "ace";
+
+    expect(sliceDiffer(firstInput, chars)).toBe(firstOutput);
+    expect(sliceDiffer(secondInput, chars)).toBe(secondOutput);
   });
 
-  test("must properly reduce finalists", () => {
-    const DEFAULT: [] = [];
-    const input = [["x", "y", 6], ["w", "v", 3], ["z", "b", 7], ["y", "i", 1]];
-    const output = ["y", "i", 1];
+  test("find correct box ids", () => {
+    const input = testData;
+    const output = ["fguij", "fghij"];
+    const result = findCorrectBoxIds(input);
 
-    expect(input.reduce(likelyListReducer, DEFAULT)).toEqual(output);
+    expect(result).toEqual(expect.arrayContaining(output));
   });
 
-  test("all letters isnt match", () => {
-    expect(differedLetters(testData[0], testData[1])).toBe(5);
-  });
+  test("it must provide valid solution", async () => {
+    const data = await inputData();
+    const solution = findSolution(data);
 
-  test("differ by two characters", () => {
-    expect(differedLetters(testData[0], testData[5])).toBe(2);
-  });
+    console.log(solution.ids);
+    console.log(solution.commonCharacters);
 
-  test("differ by one character", () => {
-    expect(differedLetters(testData[1], testData[4])).toBe(1);
-  });
-
-  test("find two correct box ids", () => {
-    expect(findCorrectBoxesId(testData)).toEqual(["fghij", "fguij"]);
-  });
-
-  test("find common letters between 2 correct box ids", () => {
-    const correctBoxIds = findCorrectBoxesId(testData);
-    expect(commonLetters(correctBoxIds)).toBe("fgij");
+    expect(solution).toHaveProperty("ids");
+    expect(solution).toHaveProperty("commonCharacters");
+    expect(solution.ids).toHaveLength(2);
   });
 });
