@@ -47,7 +47,7 @@ export const parseFabricSlice = (input: string): Slice => {
   };
 };
 
-export const findOverlap = (parsedData: Slice[]): Coordinates[] => {
+export const findOverlapSize = (parsedData: Slice[]): number => {
   const coordsMap: Map<string, number> = parsedData.reduce((acc: Map<string, number>, value: Slice) => {
     value.coords.forEach((val: Coordinates) => {
       const key = `${val.x},${val.y}`;
@@ -74,14 +74,5 @@ export const findOverlap = (parsedData: Slice[]): Coordinates[] => {
     }
   });
 
-  const result: Coordinates[] = Array.from(coordsMap).map(([key, _]) => {
-    const [x, y] = key.split(",");
-    return { x: +x, y: +y };
-  });
-
-  return result;
-};
-
-export const getOverlapSize = (overlapCoords: Coordinates[]) => {
-  return overlapCoords.length;
+  return coordsMap.size;
 };
