@@ -10,5 +10,5 @@ export interface Slice {
 
 export interface ParsedSliceInfo {
   count: number;
-  id: string;
+  id: string[];
 }
