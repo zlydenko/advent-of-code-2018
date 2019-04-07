@@ -1,4 +1,5 @@
-import { parseFabricSlice, findOverlapSize } from "../solution-pt1";
+import { parseFabricSlice, findOverlapSize, main } from "../solution-pt1";
+import importData from "../inputLoader";
 
 describe("No Matter How You Slice It pt.1 testcases", () => {
   test("it must provide valid parsed data of slice", () => {
@@ -39,5 +40,12 @@ describe("No Matter How You Slice It pt.1 testcases", () => {
     const expectedOutput = 4;
 
     expect(overlapCoords).toBe(expectedOutput);
+  });
+
+  test("it must provide valid solution", async () => {
+    const data = await importData();
+    const output = main(data);
+    console.log(output);
+    expect(output).toBeGreaterThan(0);
   });
 });

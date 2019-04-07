@@ -76,3 +76,10 @@ export const findOverlapSize = (parsedData: Slice[]): number => {
 
   return coordsMap.size;
 };
+
+export const main = (data: string[]): number => {
+  const allSlices: Slice[] = data.map(sliceData => parseFabricSlice(sliceData));
+  const overlapSize: number = findOverlapSize(allSlices);
+
+  return overlapSize;
+};
