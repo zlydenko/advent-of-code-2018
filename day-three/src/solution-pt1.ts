@@ -1,14 +1,4 @@
-// at least 1000 inches in one size
-
-interface Coordinates {
-  x: number;
-  y: number;
-}
-
-interface Slice {
-  id: number;
-  coords: Coordinates[];
-}
+import { Coordinates, Slice } from "./slices";
 
 export const parseFabricSlice = (input: string): Slice => {
   const [idStr, _, mainCoords, sizes] = input.split(" ");
@@ -67,7 +57,6 @@ export const findOverlapSize = (parsedData: Slice[]): number => {
     return acc;
   }, new Map());
 
-  //TODO: filter those, who have counter 1
   coordsMap.forEach((value: number, key: string) => {
     if (value < 2) {
       coordsMap.delete(key);
