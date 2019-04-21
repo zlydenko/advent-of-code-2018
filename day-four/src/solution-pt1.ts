@@ -110,7 +110,7 @@ export const findCommonElements = (input: number[][]): number[] => {
   }, []);
 };
 
-export const calculateResult = (data: ShiftI[]): number[] => {
+export const calculateResult = (data: ShiftI[]): number => {
   const sleepingData: Map<number, [number, number[][]]> = data.reduce(
     (acc: Map<number, [number, number[][]]>, currentShift: ShiftI) => {
       const guardId = currentShift.guardId;
@@ -136,5 +136,5 @@ export const calculateResult = (data: ShiftI[]): number[] => {
   const mostSleptGuardId: number = mostSleptGuard[0];
   const mostSleptMinAM: number[] = findCommonElements(mostSleptGuard[1][1]);
 
-  return [mostSleptGuardId, mostSleptMinAM].flat(1);
+  return mostSleptGuardId * mostSleptMinAM[0];
 };

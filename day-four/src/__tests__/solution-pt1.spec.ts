@@ -9,6 +9,8 @@ import {
   parseInputByShifts
 } from "../solution-pt1";
 
+import inputLoader from "../inputLoader";
+
 describe("day 4. part 1", () => {
   const testData = [
     "[1518-11-01 00:00] Guard #10 begins shift",
@@ -92,8 +94,19 @@ describe("day 4. part 1", () => {
   test("it must find guard who spend the most minutes asleep & minutes he most slept", () => {
     const parsedShifts = parseInputByShifts(testData);
     const output = calculateResult(parsedShifts);
-    const expected = [10, 24];
+    const expected = 240;
 
-    expect(output).toEqual(expect.arrayContaining(expected));
+    expect(output).toBe(expected);
+  });
+
+  test("it must calculate answer", async () => {
+    const data = await inputLoader();
+    const sortedByDate = sortInputByDate(data);
+    const parsedShifts = parseInputByShifts(sortedByDate);
+    const output = calculateResult(parsedShifts) || 0;
+
+    console.log(output);
+
+    expect(output).not.toBe(0);
   });
 });
