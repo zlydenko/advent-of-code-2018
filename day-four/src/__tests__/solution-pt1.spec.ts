@@ -89,11 +89,11 @@ describe("day 4. part 1", () => {
     expect(output).toEqual(expect.arrayContaining(expected));
   });
 
-  // test("it must find guard who spend the most minutes asleep", () => {
-  //   const parsedShifts = parseInputByShifts(testData);
-  //   const output = calculateResult(parsedShifts);
-  //   const expected = [10, 24];
+  test("it must find guard who spend the most minutes asleep & minutes he most slept", () => {
+    const parsedShifts = parseInputByShifts(testData);
+    const output = calculateResult(parsedShifts);
+    const expected = [10, 24];
 
-  //   expect(output).toEqual(expect.arrayContaining(expected));
-  // });
+    expect(output).toEqual(expect.arrayContaining(expected));
+  });
 });

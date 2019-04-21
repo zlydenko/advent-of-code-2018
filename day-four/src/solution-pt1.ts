@@ -110,24 +110,31 @@ export const findCommonElements = (input: number[][]): number[] => {
   }, []);
 };
 
-export const calculateResult = (data: ShiftI[]): number => {
-  const sleepingData: Map<number, number> = data.reduce((acc: Map<number, number>, currentShift: ShiftI) => {
-    const guardId = currentShift.guardId;
-    const shift = acc.get(guardId);
+export const calculateResult = (data: ShiftI[]): number[] => {
+  const sleepingData: Map<number, [number, number[][]]> = data.reduce(
+    (acc: Map<number, [number, number[][]]>, currentShift: ShiftI) => {
+      const guardId = currentShift.guardId;
+      const shift = acc.get(guardId);
 
-    if (shift) {
-      acc.set(guardId, shift + currentShift.sleep);
-    } else {
-      acc.set(guardId, currentShift.sleep);
-    }
-    return acc;
-  }, new Map());
+      if (shift) {
+        acc.set(guardId, [shift[0] + currentShift.sleep, [...shift[1], [...currentShift.sleepMinAM]]]);
+      } else {
+        acc.set(guardId, [currentShift.sleep, [[...currentShift.sleepMinAM]]]);
+      }
+      return acc;
+    },
+    new Map()
+  );
 
-  const sortByMostSlept: [number, number][] = Array.from(sleepingData).sort(
-    (a: [number, number], b: [number, number]) => {
-      return b[1] - a[1];
+  const sortByMostSlept: [number, [number, number[][]]][] = Array.from(sleepingData).sort(
+    (a: [number, [number, number[][]]], b: [number, [number, number[][]]]) => {
+      return b[1][0] - a[1][0];
     }
   );
 
-  return sortByMostSlept[0][0];
+  const mostSleptGuard: [number, [number, number[][]]] = sortByMostSlept[0];
+  const mostSleptGuardId: number = mostSleptGuard[0];
+  const mostSleptMinAM: number[] = findCommonElements(mostSleptGuard[1][1]);
+
+  return [mostSleptGuardId, mostSleptMinAM].flat(1);
 };
