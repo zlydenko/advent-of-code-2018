@@ -52,3 +52,11 @@ If you can figure out the guard most likely to be asleep at a specific time, you
 In the example above, Guard #10 spent the most minutes asleep, a total of 50 minutes (20+25+5), while Guard #99 only slept for a total of 30 minutes (10+10+10). Guard #**10** was asleep most during minute **24** (on two days, whereas any other minute the guard was asleep was only seen on one day).
 
 **What is the ID of the guard you chose multiplied by the minute you chose?** (In the above example, the answer would be `10 * 24 = 240`.)
+
+## Part two
+
+**Strategy 2**: Of all guards, which guard is most frequently asleep on the same minute?
+
+In the example above, Guard #**99** spent minute **45** asleep more than any other guard or minute - three times in total. (In all other cases, any guard spent any minute asleep at most twice.)
+
+**What is the ID of the guard you chose multiplied by the minute you chose?** (In the above example, the answer would be `99 * 45 = 4455`.)

@@ -105,8 +105,6 @@ describe("day 4. part 1", () => {
     const parsedShifts = parseInputByShifts(sortedByDate);
     const output = calculateResult(parsedShifts) || 0;
 
-    console.log(output);
-
     expect(output).not.toBe(0);
   });
 });
