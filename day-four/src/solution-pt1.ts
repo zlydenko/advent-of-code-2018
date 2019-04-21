@@ -104,7 +104,13 @@ export const parseInputByShifts = (input: string[]): ShiftI[] => {
   return input.reduce(guardShiftsReducer, []);
 };
 
-export const calculateMostSleepingGuard = (data: ShiftI[]): number => {
+export const findCommonElements = (input: number[][]): number[] => {
+  return input.reduce((acc: number[], current: number[]) => {
+    return acc.length === 0 ? current : acc.filter(value => current.find(x => x === value));
+  }, []);
+};
+
+export const calculateResult = (data: ShiftI[]): number => {
   const sleepingData: Map<number, number> = data.reduce((acc: Map<number, number>, currentShift: ShiftI) => {
     const guardId = currentShift.guardId;
     const shift = acc.get(guardId);

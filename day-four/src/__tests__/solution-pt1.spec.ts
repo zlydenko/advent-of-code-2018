@@ -1,6 +1,7 @@
 import {
   ShiftState,
-  calculateMostSleepingGuard,
+  calculateResult,
+  findCommonElements,
   getState,
   sortInputByDate,
   extractDate,
@@ -80,11 +81,19 @@ describe("day 4. part 1", () => {
     expect(output[1]).toEqual(expect.objectContaining(expectedOutput));
   });
 
-  test("it must find guard who spend the most minutes asleep", () => {
-    const parsedShifts = parseInputByShifts(testData);
-    const output = calculateMostSleepingGuard(parsedShifts);
-    const expected = 10;
+  test("it must find common elements", () => {
+    const testData = [[1, 2, 3], [2, 3, 7], [2, 8, 5]];
+    const output = findCommonElements(testData);
+    const expected = [2];
 
-    expect(output).toBe(expected);
+    expect(output).toEqual(expect.arrayContaining(expected));
   });
+
+  // test("it must find guard who spend the most minutes asleep", () => {
+  //   const parsedShifts = parseInputByShifts(testData);
+  //   const output = calculateResult(parsedShifts);
+  //   const expected = [10, 24];
+
+  //   expect(output).toEqual(expect.arrayContaining(expected));
+  // });
 });
