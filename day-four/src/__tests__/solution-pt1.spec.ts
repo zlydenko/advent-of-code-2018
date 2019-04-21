@@ -1,4 +1,12 @@
-import { sortInputByDate, extractDate, parseDate } from "../solution-pt1";
+import {
+  ShiftState,
+  calculateMostSleepingGuard,
+  getState,
+  sortInputByDate,
+  extractDate,
+  parseDate,
+  parseInputByShifts
+} from "../solution-pt1";
 
 describe("day 4. part 1", () => {
   const testData = [
@@ -48,5 +56,35 @@ describe("day 4. part 1", () => {
     const expectedFirstElem = "[1518-11-03 00:21] falls asleep";
 
     expect(output[0]).toBe(expectedFirstElem);
+  });
+
+  test("it must get valid shift state", () => {
+    const output1 = getState(testData[0]);
+    const output2 = getState(testData[1]);
+    const output3 = getState(testData[2]);
+
+    expect(output1).toBe(ShiftState.STARTED);
+    expect(output2).toBe(ShiftState.SLEEP);
+    expect(output3).toBe(ShiftState.WAKE);
+  });
+
+  test("it must parse input and slice it by shifts", () => {
+    const output = parseInputByShifts(testData);
+    const expectedOutput = {
+      guardId: 99,
+      sleep: 10,
+      sleepMinAM: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49],
+      status: ShiftState.FINISHED
+    };
+
+    expect(output[1]).toEqual(expect.objectContaining(expectedOutput));
+  });
+
+  test("it must find guard who spend the most minutes asleep", () => {
+    const parsedShifts = parseInputByShifts(testData);
+    const output = calculateMostSleepingGuard(parsedShifts);
+    const expected = 10;
+
+    expect(output).toBe(expected);
   });
 });
