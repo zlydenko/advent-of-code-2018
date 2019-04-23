@@ -17,7 +17,7 @@ export const sortInputByDate = (input: string[]): string[] => {
   });
 };
 
-interface ShiftI {
+export interface ShiftI {
   guardId: number;
   sleep: number;
   sleepMinAM: number[];

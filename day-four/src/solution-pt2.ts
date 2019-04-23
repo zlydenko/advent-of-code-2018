@@ -1,4 +1,4 @@
-const x = () => {}
+import {ShiftI} from './solution-pt1'
 
 //we use sort by date & reducer of shifts from part 1
 
@@ -26,4 +26,37 @@ export const findCommonMinutes = (data: number[][]): [number,number] => {
     }, [0,0])
 
     return mostFrequent
+}
+
+type guardId = number;
+type minutesSlept = Array<number[]>;
+
+const mostFrequentSleptReducer = (acc: Map<guardId, minutesSlept>, val: ShiftI) => {
+    const storedShift = acc.get(val.guardId);
+
+    if (!storedShift) {
+        const sleptMinutes = new Array();
+        sleptMinutes.push(...val.sleepMinAM);
+        acc.set(val.guardId, [sleptMinutes]);
+    } else {
+        const sleptMinutes = storedShift;
+        acc.set(val.guardId, [...sleptMinutes, [...val.sleepMinAM]]);
+    }
+
+    return acc
+}
+
+export const mostFrequentSleep = (input: ShiftI[]): Map<guardId,minutesSlept> => {
+    return input.reduce(mostFrequentSleptReducer, new Map());
+}
+
+export const getResult = (reducedShifts: Map<guardId,minutesSlept>): [number,number] => {
+    const [guardId, mostFreqMinute, _counter] = Array.from(reducedShifts).reduce((acc: [number,number, number], val: [number, number[][]]) => {
+        const minutesSlept = [...val[1]];
+        const [mostFreqMinute, freqMinuteCount] = findCommonMinutes(minutesSlept);
+        
+        return acc[2] > freqMinuteCount ? acc : [val[0], mostFreqMinute, freqMinuteCount]
+    }, [0,0,0]);
+
+    return [guardId, mostFreqMinute]
 }
