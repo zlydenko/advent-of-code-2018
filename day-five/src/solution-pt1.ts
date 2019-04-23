@@ -1,4 +1,4 @@
-type unit = string;
+export type unit = string;
 
 export const unitsHaveSameType = (units: [unit,unit]):boolean => {
     return units[0].toLowerCase() === units[1].toLowerCase()
