@@ -50,7 +50,7 @@ export const mostFrequentSleep = (input: ShiftI[]): Map<guardId,minutesSlept> =>
     return input.reduce(mostFrequentSleptReducer, new Map());
 }
 
-export const getResult = (reducedShifts: Map<guardId,minutesSlept>): [number,number] => {
+export const getResult = (reducedShifts: Map<guardId,minutesSlept>): number => {
     const [guardId, mostFreqMinute, _counter] = Array.from(reducedShifts).reduce((acc: [number,number, number], val: [number, number[][]]) => {
         const minutesSlept = [...val[1]];
         const [mostFreqMinute, freqMinuteCount] = findCommonMinutes(minutesSlept);
@@ -58,5 +58,5 @@ export const getResult = (reducedShifts: Map<guardId,minutesSlept>): [number,num
         return acc[2] > freqMinuteCount ? acc : [val[0], mostFreqMinute, freqMinuteCount]
     }, [0,0,0]);
 
-    return [guardId, mostFreqMinute]
+    return guardId * mostFreqMinute
 }

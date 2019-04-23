@@ -82,8 +82,8 @@ describe('day 4, part two', () => {
         const parsedShifts = parseInputByShifts(testData);
         const reducedShiftsByMinSlept = mostFrequentSleep(parsedShifts);
         const output = getResult(reducedShiftsByMinSlept);
-        const expected = [99,45];
+        const expected = 4455;
 
-        expect(output).toEqual(expect.arrayContaining(expected));
+        expect(output).toBe(expected);
     })
 })
