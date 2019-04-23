@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "ts:w": "tsc -w",
-    "start": "node -r esm day-four/src/solution-pt2",
-    "test": "jest day-four/src/__tests__/solution-pt2.spec.ts"
+    "start": "node -r esm day-five/src/solution-pt1",
+    "test": "jest day-five/src/__tests__/solution-pt1.spec.ts"
   },
   "keywords": [],
   "author": "",
