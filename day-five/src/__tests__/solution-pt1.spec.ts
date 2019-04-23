@@ -1,7 +1,9 @@
 import {
     unitsHaveSameType,
     unitsHaveSamePolarity,
-    isReact
+    isReact,
+    polymerAfterReactions,
+    getFullyReactedPolymerSize
 } from '../solution-pt1'
 
 describe('day 5, part 1', () => {
@@ -68,5 +70,35 @@ describe('day 5, part 1', () => {
         expect(isReact(testData[2])).toBe(expected[2])
         expect(isReact(testData[3])).toBe(expected[3])
         expect(isReact(testData[4])).toBe(expected[4])
+    })
+
+    test('it must show valid polymer after all reactions', () => {
+        const testData = [
+            'aA',
+            'abBA',
+            'abAB',
+            'aabAAB',
+            'dabAcCaCBAcCcaDA'
+        ]
+        const expected = [
+            '',
+            '',
+            'abAB',
+            'aabAAB',
+            'dabCBAcaDA'
+        ]
+
+        expect(polymerAfterReactions(testData[0])).toBe(expected[0])
+        expect(polymerAfterReactions(testData[1])).toBe(expected[1])
+        expect(polymerAfterReactions(testData[2])).toBe(expected[2])
+        expect(polymerAfterReactions(testData[3])).toBe(expected[3])
+    })
+
+    test('it must show valid size of fully reacted polymer', () => {
+        const testData = 'dabAcCaCBAcCcaDA';
+        const output = getFullyReactedPolymerSize(testData);
+        const expected = 10;
+
+        expect(output).toBe(expected)
     })
 })
