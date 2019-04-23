@@ -6,6 +6,8 @@ import {
     getFullyReactedPolymerSize
 } from '../solution-pt1'
 
+import inputLoader from '../inputLoader'
+
 describe('day 5, part 1', () => {
     test('it must check if units have same type', () => {
         const testData: [string,string][] = [
@@ -100,5 +102,13 @@ describe('day 5, part 1', () => {
         const expected = 10;
 
         expect(output).toBe(expected)
+    })
+
+    test('it must produce valid result of part 1', async () => {
+        const data = await inputLoader();
+        const output = getFullyReactedPolymerSize(data) || null;
+
+        expect(output).not.toBeNull();
+        expect(String(output)).not.toHaveLength(0);
     })
 })
