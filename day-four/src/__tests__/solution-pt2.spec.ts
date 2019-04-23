@@ -1,6 +1,7 @@
-import {parseInputByShifts} from '../solution-pt1'
+import {sortInputByDate, parseInputByShifts} from '../solution-pt1'
 import {findCommonMinutes, mostFrequentSleep, getResult} from '../solution-pt2'
 
+import inputLoader from '../inputLoader';
 
 describe('day 4, part two', () => {
     const testData = [
@@ -85,5 +86,19 @@ describe('day 4, part two', () => {
         const expected = 4455;
 
         expect(output).toBe(expected);
+    })
+
+    test('it must produce valid result for part 2', async () => {
+        const data = await inputLoader();
+        const sortedInputData = sortInputByDate(data);
+        const parsedShifts = parseInputByShifts(sortedInputData);
+        const reducedShiftsByMinSlept = mostFrequentSleep(parsedShifts);
+        const output = getResult(reducedShiftsByMinSlept);
+
+        console.log(output)
+
+        expect(output).not.toBeNull();
+        expect(output).not.toBeUndefined();
+        expect(output).not.toBe(0);
     })
 })
