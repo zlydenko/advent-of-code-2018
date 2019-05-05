@@ -63,58 +63,52 @@ export const areaCreator = (startPoint: coords, endPoint: coords, originPoint: c
 
     memo.set(distance, cachedNeighbours);
     distance++;
-    x++;
   }
 
   return memo;
 };
 
-// export const areaGenerator = function*(
-//   startPoint: coords,
-//   endPoint: coords,
-//   originPoint: coords
-// ): IterableIterator<any> {
-//   let distance = 1;
-//   let freeSpaceOver = false;
-//   let memo: Map<number, Set<string>> = new Map();
+export const areaGenerator = function*(
+  startPoint: coords,
+  endPoint: coords,
+  originPoint: coords
+): IterableIterator<any> {
+  let distance = 1;
+  let memo: Map<number, Set<string>> = new Map();
 
-//   //? Map( 1 => Set('1,1','2,0','1,2') )
+  //? Map( 1 => Set('1,1','2,0','1,2') )
 
-//   while (!freeSpaceOver) {
-//     const prevCoords = memo.has(distance - 1) ? memo.get(distance - 1) : null;
-//     const cachedNeighbours = new Set();
+  while (true) {
+    const prevCoords = memo.has(distance - 1) ? memo.get(distance - 1) : null;
+    const cachedNeighbours = new Set();
 
-//     if (!prevCoords) {
-//       const neighbours = findNeighbours(originPoint, startPoint, endPoint);
+    if (!prevCoords) {
+      const neighbours = findNeighbours(originPoint, startPoint, endPoint);
 
-//       if (neighbours.length === 0) {
-//         freeSpaceOver = true;
-//       } else {
-//         neighbours.forEach(({ x, y }) => cachedNeighbours.add(`${x},${y}`));
-//       }
-//     } else {
-//       Array.from(prevCoords).forEach(coords => {
-//         const c = coords.split(",");
-//         const parsedCoords = {
-//           x: +c[0],
-//           y: +c[1]
-//         };
-//         const neighbours = findNeighbours(parsedCoords, startPoint, endPoint);
+      neighbours.forEach(({ x, y }) => cachedNeighbours.add(`${x},${y}`));
+    } else {
+      Array.from(prevCoords).forEach(coords => {
+        const c = coords.split(",");
+        const parsedCoords = {
+          x: +c[0],
+          y: +c[1]
+        };
+        const neighbours = findNeighbours(parsedCoords, startPoint, endPoint);
 
-//         if (neighbours.length === 0) {
-//           freeSpaceOver = true;
-//         } else {
-//           neighbours.forEach(({ x, y }) => cachedNeighbours.add(`${x},${y}`));
-//         }
-//       });
-//     }
+        neighbours.forEach(({ x, y }) => {
+          if (x !== originPoint.x && y !== originPoint.y) {
+            cachedNeighbours.add(`${x},${y}`);
+          }
+        });
+      });
+    }
 
-//     memo.set(distance, cachedNeighbours);
+    const thereNoNeighbours = cachedNeighbours.size === 0;
 
-//     if (freeSpaceOver) break;
+    if (thereNoNeighbours) break;
 
-//     yield Array.from(memo.get(distance) || []);
-
-//     distance++;
-//   }
-// };
+    memo.set(distance, cachedNeighbours);
+    yield Array.from(memo.get(distance) || []);
+    distance++;
+  }
+};
