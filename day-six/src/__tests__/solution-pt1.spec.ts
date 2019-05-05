@@ -1,6 +1,7 @@
 import inputLoader from "../inputLoader";
 import {
   getMaxCoordValue,
+  getMinCoordValue,
   findNeighbours
   // checkIfAreaIsInfinite
   // getManhattanDistance
@@ -20,9 +21,12 @@ describe("day six", () => {
 
   test("it must get border size", () => {
     const output = getMaxCoordValue(testData);
+    const output2 = getMinCoordValue(testData);
     const expected = 9;
+    const expected2 = 1;
 
     expect(output).toBe(expected);
+    expect(output2).toBe(expected2);
   });
 
   test("it must get a neighbours", () => {
@@ -31,6 +35,7 @@ describe("day six", () => {
         x: 1,
         y: 1
       },
+      { x: 0, y: 0 },
       {
         x: 9,
         y: 9
