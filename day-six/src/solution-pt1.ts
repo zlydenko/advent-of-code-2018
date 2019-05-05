@@ -29,45 +29,6 @@ type coords = {
 };
 
 //? IterableIterator<coords[]> this fucking typescript type checked thinks that i can have UNDEFINED, when i def CANT
-
-export const areaCreator = (startPoint: coords, endPoint: coords, originPoint: coords) => {
-  let distance = 1;
-  const memo = new Map();
-  let x = 0;
-
-  while (true) {
-    const prevCoords: Set<string> = memo.get(distance - 1);
-    const cachedNeighbours = new Set();
-
-    if (prevCoords) {
-      Array.from(prevCoords).forEach((value: string) => {
-        const [x, y] = value.split(",");
-        const neighbours = findNeighbours({ x: +x, y: +y }, startPoint, endPoint);
-
-        neighbours.forEach(coords => {
-          if (coords.x !== originPoint.x && coords.y !== originPoint.y) {
-            cachedNeighbours.add(`${coords.x},${coords.y}`);
-          }
-        });
-      });
-    } else {
-      const neighbours = findNeighbours(originPoint, startPoint, endPoint);
-      neighbours.forEach(coords => {
-        cachedNeighbours.add(`${coords.x},${coords.y}`);
-      });
-    }
-
-    const thereNoNeighbours = cachedNeighbours.size === 0;
-
-    if (thereNoNeighbours) break;
-
-    memo.set(distance, cachedNeighbours);
-    distance++;
-  }
-
-  return memo;
-};
-
 export const areaGenerator = function*(
   startPoint: coords,
   endPoint: coords,
@@ -75,8 +36,6 @@ export const areaGenerator = function*(
 ): IterableIterator<any> {
   let distance = 1;
   let memo: Map<number, Set<string>> = new Map();
-
-  //? Map( 1 => Set('1,1','2,0','1,2') )
 
   while (true) {
     const prevCoords = memo.has(distance - 1) ? memo.get(distance - 1) : null;
