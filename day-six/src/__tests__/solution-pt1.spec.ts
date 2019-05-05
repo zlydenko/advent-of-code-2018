@@ -2,7 +2,8 @@ import inputLoader from "../inputLoader";
 import {
   getMaxCoordValue,
   getMinCoordValue,
-  findNeighbours
+  findNeighbours,
+  areaCreator
   // checkIfAreaIsInfinite
   // getManhattanDistance
 } from "../solution-pt1";
@@ -61,6 +62,26 @@ describe("day six", () => {
     ];
 
     expect(output).toEqual(expect.arrayContaining(expected));
+  });
+
+  test("it must generate areas", () => {
+    const startPoint = {
+      x: 0,
+      y: 0
+    };
+    const endPoint = {
+      x: 2,
+      y: 2
+    };
+    const originPoint = {
+      x: 1,
+      y: 1
+    };
+    const areaIterator = areaCreator(startPoint, endPoint, originPoint);
+
+    console.log(areaIterator);
+
+    expect(false).toBe(true);
   });
 
   // test("it must generate Manhattan distance for location", () => {
