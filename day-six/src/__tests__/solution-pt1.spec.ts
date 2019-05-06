@@ -1,5 +1,8 @@
 import inputLoader from '../inputLoader';
-import {} from '../solution-pt1';
+import {
+  getBorderPoint
+  //something
+} from '../solution-pt1';
 
 describe('day six', () => {
   let data: string[][] = [];
@@ -11,5 +14,12 @@ describe('day six', () => {
 
   test('it must load data', () => {
     expect(data).toHaveLength(50);
+  });
+
+  test('it must get border point of matrix', () => {
+    const output = getBorderPoint(testData);
+    const expected = { x: 9, y: 9 };
+
+    expect(output).toEqual(expect.objectContaining(expected));
   });
 });
