@@ -7,6 +7,7 @@ import {
   Point
   //something
 } from "../solution-pt1";
+import { Area } from "../area.class";
 
 describe("day six", () => {
   let data: string[][] = [];
@@ -72,5 +73,25 @@ describe("day six", () => {
 
     expect(testPoint.isFinite()).toBe(false);
     expect(testPoint.getAreaQuantity()).toBe(2);
+  });
+
+  test("it must create valid Area", () => {
+    const origin = {
+      x: 1,
+      y: 1
+    };
+    const testArea = new Area(origin);
+
+    testArea.increase();
+    testArea.increase(3);
+    testArea.isInfinite();
+
+    const expected = {
+      size: 5,
+      infinite: true
+    };
+
+    expect(testArea).toBeInstanceOf(Area);
+    expect(testArea.info()).toEqual(expect.objectContaining(expected));
   });
 });
