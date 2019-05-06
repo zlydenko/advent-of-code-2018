@@ -4,7 +4,7 @@ import {
   createMatrix,
   convertPoints,
   calculateManhattanDistance,
-  Point
+  getClosestPointIdx
   //something
 } from "../solution-pt1";
 import { Area } from "../area.class";
@@ -53,26 +53,12 @@ describe("day six", () => {
     };
     const point = {
       x: 0,
-      y: 1
+      y: 0
     };
     const output = calculateManhattanDistance(point, originPoint);
-    const expected = 1;
+    const expected = 2;
 
     expect(output).toBe(expected);
-  });
-
-  test("it must create valid Point", () => {
-    const coords = {
-      x: 1,
-      y: 1
-    };
-    const testPoint = new Point(coords);
-    testPoint.setInfinite();
-    testPoint.addArea();
-    testPoint.addArea();
-
-    expect(testPoint.isFinite()).toBe(false);
-    expect(testPoint.getAreaQuantity()).toBe(2);
   });
 
   test("it must create valid Area", () => {
@@ -93,5 +79,12 @@ describe("day six", () => {
 
     expect(testArea).toBeInstanceOf(Area);
     expect(testArea.info()).toEqual(expect.objectContaining(expected));
+  });
+
+  test("it must get closest point idx", () => {
+    const points = convertPoints(testData);
+    const output = getClosestPointIdx(0, 0, points);
+
+    expect(output).toBe(0);
   });
 });

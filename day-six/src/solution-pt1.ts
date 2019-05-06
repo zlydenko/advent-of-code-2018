@@ -1,4 +1,6 @@
-type coords = {
+import { Area } from "./area.class";
+
+export type coords = {
   x: number;
   y: number;
 };
@@ -22,64 +24,48 @@ export const createMatrix = (borderPoint: coords, startPoint: coords = { x: 0, y
     .map(_ => Array(borderPoint.y - startPoint.y + 1));
 };
 
+const convertPoint = (point: string[]): coords => ({ x: +point[0], y: +point[1] });
+
 export const convertPoints = (points: string[][]): coords[] => {
-  return points.map(([x, y]) => ({
-    x: +x,
-    y: +y
-  }));
+  return points.map(convertPoint);
 };
 
-interface MatrixCell {
-  coords: coords;
-  areaOf: Point | null;
-}
-
-export const calculateManhattanDistance = (point: coords, originPoint: coords) => {
+export const calculateManhattanDistance = (point: coords, originPoint: coords): number => {
   return Math.abs(point.x - originPoint.x) + Math.abs(point.y - originPoint.y);
 };
 
-export class Point {
-  coords: coords;
-  haveInfiniteArea: boolean;
-  areaQ: number;
+export const getClosestPointIdx = (x: number, y: number, points: coords[]): number | null => {
+  const distances: Map<number, number[]> = new Map();
 
-  constructor(coords: coords) {
-    this.coords = coords;
-    this.haveInfiniteArea = false;
-    this.areaQ = 0;
-  }
+  points.forEach((point: coords, idx: number) => {
+    const manhattanDistance = calculateManhattanDistance({ x, y }, point);
+    const idsWithSameDistance = distances.get(manhattanDistance);
 
-  isFinite() {
-    return !this.haveInfiniteArea;
-  }
+    idsWithSameDistance
+      ? distances.set(manhattanDistance, [...idsWithSameDistance, idx])
+      : distances.set(manhattanDistance, [idx]);
+  });
 
-  setInfinite() {
-    this.haveInfiniteArea = true;
-  }
+  const [_, closestDistanceIds]: [number, number[]] = Array.from(distances).sort((a, b) => {
+    return a[0] - b[0];
+  })[0];
 
-  addArea() {
-    this.areaQ++;
-  }
-
-  getAreaQuantity() {
-    return this.areaQ;
-  }
-}
-
-export const pointsFab = (coords: coords): Point => new Point(coords);
-
-export const getCellInfo = (x: number, y: number, points: coords[]): MatrixCell => {
-  const coords = { x, y };
+  return closestDistanceIds.length > 1 ? null : closestDistanceIds[0];
 };
 
-// export const calculatePointsAreas = (matrix: any[][], points: coords[]): MatrixCell[] => {
-//   return matrix.reduce((rowsAcc, _rows, x) => {
-//     const cells = _rows.reduce((cellsAcc, _, y) => {
-//       const calculateCell = ['test'];
+// export const calculatePointsAreas = (matrix: any[][], points: coords[]) => {
+//   const pointAreas: Area[] = points.map((point: coords) => new Area(point));
 
-//       return cellsAcc.length === 0 ? calculateCell : [...cellsAcc, calculateCell];
-//     }, []);
+//   matrix.forEach((_r, x) => {
+//     const cells = _r.forEach((_, y) => {
+//       //? get which point's part of area this cell
+//       const closestPointId = getClosestPointIdx(x, y, points);
 
-//     return rowsAcc.length === 0 ? cells : [...rowsAcc, ...cells];
-//   }, []);
+//       if (closestPointId) {
+//         //? if this cell is part of area - set new data to area and check if this border row or cell
+//       }
+//       //? if it is - check area is infinite
+//       //? if cell is not part of points area - do nothing
+//     });
+//   });
 // };
