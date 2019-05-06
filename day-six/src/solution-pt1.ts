@@ -21,3 +21,24 @@ export const createMatrix = (borderPoint: coords, startPoint: coords = { x: 0, y
     .fill(null)
     .map(_ => Array(borderPoint.y - startPoint.y + 1));
 };
+
+export const convertPoints = (points: string[][]): coords[] => {
+  return points.map(([x, y]) => ({
+    x: +x,
+    y: +y
+  }));
+};
+
+type Point = {
+  coords: coords;
+  haveInfiniteArea: boolean;
+  areaQ: number;
+};
+
+interface MatrixCell {
+  areaOf: Point;
+}
+
+export const calculateManhattanDistance = (point: coords, originPoint: coords) => {
+  return Math.abs(point.x - originPoint.x) + Math.abs(point.y - originPoint.y);
+};

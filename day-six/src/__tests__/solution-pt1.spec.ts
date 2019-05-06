@@ -1,7 +1,9 @@
 import inputLoader from '../inputLoader';
 import {
   getBorderPoint,
-  createMatrix
+  createMatrix,
+  convertPoints,
+  calculateManhattanDistance
   //something
 } from '../solution-pt1';
 
@@ -31,4 +33,40 @@ describe('day six', () => {
     expect(output).toHaveLength(10);
     expect(output[0]).toHaveLength(10);
   });
+
+  test('it must convert points', () => {
+    const output = convertPoints(testData);
+    const expected = {
+      x: 1,
+      y: 1
+    };
+
+    expect(output[0]).toEqual(expect.objectContaining(expected));
+  });
+
+  test('it must calculate Manhattan distance', () => {
+    const originPoint = {
+      x: 1,
+      y: 1
+    };
+    const point = {
+      x: 0,
+      y: 1
+    };
+    const output = calculateManhattanDistance(point, originPoint);
+    const expected = 1;
+
+    expect(output).toBe(expected);
+  });
+
+  // test('it must calculate Manhattan distance for first cell of matrix', () => {
+  //   const borderPoint = getBorderPoint(testData);
+  //   const matrix = createMatrix(borderPoint);
+  //   const pointsCoords = convertPoints(testData);
+  //   const output = calculateManhattanDistance(matrix, pointsCoords);
+
+  //   console.log(output);
+
+  //   expect(false).toBe(true);
+  // });
 });
