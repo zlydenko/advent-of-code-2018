@@ -1,73 +1,85 @@
-export const getMaxCoordValue = (input: string[][]): number => {
-  return input
-    .flat()
-    .map(value => +value)
-    .sort((a, b) => b - a)[0];
-};
-
-export const getMinCoordValue = (input: string[][]): number => {
-  return input
-    .flat()
-    .map(value => +value)
-    .sort((a, b) => a - b)[0];
-};
-
-//todo: it can be better
-export const findNeighbours = (location: coords, min: coords, max: coords): coords[] => {
-  const { x, y } = location;
-  const isValid = (c: coords): boolean => c.x >= min.x && c.y >= min.y && c.x <= max.x && c.y <= max.y;
-  const result = [{ x: x - 1, y }, { x: x + 1, y }, { x, y: y - 1 }, { x, y: y + 1 }];
-
-  return result.filter((c: coords) => isValid(c));
-};
-
-//todo area coordinates by manhattan distance generator
-
 type coords = {
   x: number;
   y: number;
 };
 
-//? IterableIterator<coords[]> this fucking typescript type checked thinks that i can have UNDEFINED, when i def CANT
-export const areaGenerator = function*(
-  startPoint: coords,
-  endPoint: coords,
-  originPoint: coords
-): IterableIterator<any> {
-  let distance = 1;
-  let memo: Map<number, Set<string>> = new Map();
+export const getBorderPoint = (points: string[][]): coords => {
+  const maxValue: number = +points
+    .reduce((acc, val) => {
+      return acc.length === 0 ? val : [...acc, ...val];
+    }, [])
+    .sort((a, b) => +b - +a)[0];
 
-  while (true) {
-    const prevCoords = memo.has(distance - 1) ? memo.get(distance - 1) : null;
-    const cachedNeighbours = new Set();
-
-    if (!prevCoords) {
-      const neighbours = findNeighbours(originPoint, startPoint, endPoint);
-
-      neighbours.forEach(({ x, y }) => cachedNeighbours.add(`${x},${y}`));
-    } else {
-      Array.from(prevCoords).forEach(coords => {
-        const c = coords.split(",");
-        const parsedCoords = {
-          x: +c[0],
-          y: +c[1]
-        };
-        const neighbours = findNeighbours(parsedCoords, startPoint, endPoint);
-
-        neighbours.forEach(({ x, y }) => {
-          if (x !== originPoint.x && y !== originPoint.y) {
-            cachedNeighbours.add(`${x},${y}`);
-          }
-        });
-      });
-    }
-
-    const thereNoNeighbours = cachedNeighbours.size === 0;
-
-    if (thereNoNeighbours) break;
-
-    memo.set(distance, cachedNeighbours);
-    yield Array.from(memo.get(distance) || []);
-    distance++;
-  }
+  return {
+    x: maxValue,
+    y: maxValue
+  };
 };
+
+export const createMatrix = (borderPoint: coords, startPoint: coords = { x: 0, y: 0 }): any[][] => {
+  return Array(borderPoint.x - startPoint.x + 1)
+    .fill(null)
+    .map(_ => Array(borderPoint.y - startPoint.y + 1));
+};
+
+export const convertPoints = (points: string[][]): coords[] => {
+  return points.map(([x, y]) => ({
+    x: +x,
+    y: +y
+  }));
+};
+
+interface MatrixCell {
+  coords: coords;
+  areaOf: Point | null;
+}
+
+export const calculateManhattanDistance = (point: coords, originPoint: coords) => {
+  return Math.abs(point.x - originPoint.x) + Math.abs(point.y - originPoint.y);
+};
+
+export class Point {
+  coords: coords;
+  haveInfiniteArea: boolean;
+  areaQ: number;
+
+  constructor(coords: coords) {
+    this.coords = coords;
+    this.haveInfiniteArea = false;
+    this.areaQ = 0;
+  }
+
+  isFinite() {
+    return !this.haveInfiniteArea;
+  }
+
+  setInfinite() {
+    this.haveInfiniteArea = true;
+  }
+
+  addArea() {
+    this.areaQ++;
+  }
+
+  getAreaQuantity() {
+    return this.areaQ;
+  }
+}
+
+export const pointsFab = (coords: coords): Point => new Point(coords);
+
+export const getCellInfo = (x: number, y: number, points: coords[]): MatrixCell => {
+  const coords = { x, y };
+};
+
+// export const calculatePointsAreas = (matrix: any[][], points: coords[]): MatrixCell[] => {
+//   return matrix.reduce((rowsAcc, _rows, x) => {
+//     const cells = _rows.reduce((cellsAcc, _, y) => {
+//       const calculateCell = ['test'];
+
+//       return cellsAcc.length === 0 ? calculateCell : [...cellsAcc, calculateCell];
+//     }, []);
+
+//     return rowsAcc.length === 0 ? cells : [...rowsAcc, ...cells];
+//   }, []);
+// };

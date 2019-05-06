@@ -1,11 +1,11 @@
 import inputLoader from "../inputLoader";
 import {
-  getMaxCoordValue,
-  getMinCoordValue,
-  findNeighbours,
-  areaGenerator
-  // checkIfAreaIsInfinite
-  // getManhattanDistance
+  getBorderPoint,
+  createMatrix,
+  convertPoints,
+  calculateManhattanDistance,
+  Point
+  //something
 } from "../solution-pt1";
 
 describe("day six", () => {
@@ -20,66 +20,57 @@ describe("day six", () => {
     expect(data).toHaveLength(50);
   });
 
-  test("it must get border size", () => {
-    const output = getMaxCoordValue(testData);
-    const output2 = getMinCoordValue(testData);
-    const expected = 9;
-    const expected2 = 1;
+  test("it must get border point of matrix", () => {
+    const output = getBorderPoint(testData);
+    const expected = { x: 9, y: 9 };
 
-    expect(output).toBe(expected);
-    expect(output2).toBe(expected2);
+    expect(output).toEqual(expect.objectContaining(expected));
   });
 
-  test("it must get a neighbours", () => {
-    const output = findNeighbours(
-      {
-        x: 1,
-        y: 1
-      },
-      { x: 0, y: 0 },
-      {
-        x: 9,
-        y: 9
-      }
-    );
-    const expected = [
-      {
-        x: 0,
-        y: 1
-      },
-      {
-        x: 2,
-        y: 1
-      },
-      {
-        x: 1,
-        y: 0
-      },
-      {
-        x: 1,
-        y: 2
-      }
-    ];
+  test("it must build matrix", () => {
+    const borderPoint = getBorderPoint(testData);
+    const output = createMatrix(borderPoint);
 
-    expect(output).toEqual(expect.arrayContaining(expected));
+    expect(output).toHaveLength(10);
+    expect(output[0]).toHaveLength(10);
   });
 
-  test("it must generate areas", () => {
-    const startPoint = {
-      x: 0,
-      y: 0
+  test("it must convert points", () => {
+    const output = convertPoints(testData);
+    const expected = {
+      x: 1,
+      y: 1
     };
-    const endPoint = {
-      x: 2,
-      y: 2
-    };
+
+    expect(output[0]).toEqual(expect.objectContaining(expected));
+  });
+
+  test("it must calculate Manhattan distance", () => {
     const originPoint = {
       x: 1,
       y: 1
     };
-    const areaIterator = areaGenerator(startPoint, endPoint, originPoint);
-    const expected = [["0,1", "2,1", "1,0", "1,2"], ["0,0", "0,2", "2,0", "2,2"]];
+    const point = {
+      x: 0,
+      y: 1
+    };
+    const output = calculateManhattanDistance(point, originPoint);
+    const expected = 1;
 
-    expect(Array.from(areaIterator)).toEqual(expect.arrayContaining(expected));
+    expect(output).toBe(expected);
+  });
+
+  test("it must create valid Point", () => {
+    const coords = {
+      x: 1,
+      y: 1
+    };
+    const testPoint = new Point(coords);
+    testPoint.setInfinite();
+    testPoint.addArea();
+    testPoint.addArea();
+
+    expect(testPoint.isFinite()).toBe(false);
+    expect(testPoint.getAreaQuantity()).toBe(2);
   });
 });
