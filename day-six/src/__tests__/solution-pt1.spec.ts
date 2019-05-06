@@ -1,6 +1,7 @@
 import inputLoader from '../inputLoader';
 import {
-  getBorderPoint
+  getBorderPoint,
+  createMatrix
   //something
 } from '../solution-pt1';
 
@@ -21,5 +22,13 @@ describe('day six', () => {
     const expected = { x: 9, y: 9 };
 
     expect(output).toEqual(expect.objectContaining(expected));
+  });
+
+  test('it must build matrix', () => {
+    const borderPoint = getBorderPoint(testData);
+    const output = createMatrix(borderPoint);
+
+    expect(output).toHaveLength(10);
+    expect(output[0]).toHaveLength(10);
   });
 });
