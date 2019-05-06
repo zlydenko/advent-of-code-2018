@@ -5,9 +5,10 @@ import {
   convertPoints,
   calculateManhattanDistance,
   getClosestPointIdx,
-  calculatePointsAreas
-  //something
+  calculatePointsAreas,
+  getLargestFiniteAreaSize
 } from "../solution-pt1";
+
 import { Area } from "../area.class";
 
 describe("day six", () => {
@@ -100,5 +101,17 @@ describe("day six", () => {
     };
 
     expect(output[4].info()).toEqual(expect.objectContaining(expected));
+  });
+
+  test("it must get size of largest finite area", () => {
+    const borderPoint = getBorderPoint(data);
+    const matrix = createMatrix(borderPoint);
+    const pointsCoords = convertPoints(data);
+    const areas = calculatePointsAreas(matrix, pointsCoords);
+    const output = getLargestFiniteAreaSize(areas);
+
+    console.log(output);
+
+    expect(output).toBeTruthy();
   });
 });

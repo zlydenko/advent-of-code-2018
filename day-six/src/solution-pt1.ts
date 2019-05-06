@@ -74,3 +74,10 @@ export const calculatePointsAreas = (matrix: any[][], points: coords[]): Area[] 
 
   return pointAreas;
 };
+
+export const getLargestFiniteAreaSize = (areas: Area[]): number => {
+  return areas.reduce((acc, area) => {
+    const { infinite, size } = area.info();
+    return infinite === false && acc < size ? size : acc;
+  }, 0);
+};
