@@ -3,7 +3,8 @@ import {
   getBorderPoint,
   createMatrix,
   convertPoints,
-  calculateManhattanDistance
+  calculateManhattanDistance,
+  Point
   //something
 } from '../solution-pt1';
 
@@ -59,14 +60,17 @@ describe('day six', () => {
     expect(output).toBe(expected);
   });
 
-  // test('it must calculate Manhattan distance for first cell of matrix', () => {
-  //   const borderPoint = getBorderPoint(testData);
-  //   const matrix = createMatrix(borderPoint);
-  //   const pointsCoords = convertPoints(testData);
-  //   const output = calculateManhattanDistance(matrix, pointsCoords);
+  test('it must create valid Point', () => {
+    const coords = {
+      x: 1,
+      y: 1
+    };
+    const testPoint = new Point(coords);
+    testPoint.setInfinite();
+    testPoint.addArea();
+    testPoint.addArea();
 
-  //   console.log(output);
-
-  //   expect(false).toBe(true);
-  // });
+    expect(testPoint.isFinite()).toBe(false);
+    expect(testPoint.getAreaQuantity()).toBe(2);
+  });
 });
