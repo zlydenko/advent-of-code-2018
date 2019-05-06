@@ -1,7 +1,7 @@
 import { coords } from "./solution-pt1";
 
 export class Area {
-  size: number = 1;
+  size: number = 0;
   infinite: boolean = false;
   origin: coords;
 
@@ -9,8 +9,8 @@ export class Area {
     this.origin = center;
   }
 
-  increase(n: number | null = null) {
-    n === null ? this.size++ : (this.size += n);
+  increase() {
+    this.size += 1;
   }
 
   isInfinite() {

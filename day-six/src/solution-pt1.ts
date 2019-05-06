@@ -53,19 +53,24 @@ export const getClosestPointIdx = (x: number, y: number, points: coords[]): numb
   return closestDistanceIds.length > 1 ? null : closestDistanceIds[0];
 };
 
-// export const calculatePointsAreas = (matrix: any[][], points: coords[]) => {
-//   const pointAreas: Area[] = points.map((point: coords) => new Area(point));
+export const calculatePointsAreas = (matrix: any[][], points: coords[]): Area[] => {
+  const pointAreas: Area[] = points.map((point: coords) => new Area(point));
+  const width = matrix.length - 1;
+  const height = matrix[0].length - 1;
 
-//   matrix.forEach((_r, x) => {
-//     const cells = _r.forEach((_, y) => {
-//       //? get which point's part of area this cell
-//       const closestPointId = getClosestPointIdx(x, y, points);
+  for (let x = 0; x <= width; x++) {
+    for (let y = 0; y <= height; y++) {
+      const closestPointId = getClosestPointIdx(x, y, points);
 
-//       if (closestPointId) {
-//         //? if this cell is part of area - set new data to area and check if this border row or cell
-//       }
-//       //? if it is - check area is infinite
-//       //? if cell is not part of points area - do nothing
-//     });
-//   });
-// };
+      if (closestPointId !== null) {
+        pointAreas[closestPointId].increase();
+
+        if (x === 0 || y === 0 || x === width || y === height) {
+          pointAreas[closestPointId].isInfinite();
+        }
+      }
+    }
+  }
+
+  return pointAreas;
+};

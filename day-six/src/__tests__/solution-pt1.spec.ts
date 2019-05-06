@@ -4,7 +4,8 @@ import {
   createMatrix,
   convertPoints,
   calculateManhattanDistance,
-  getClosestPointIdx
+  getClosestPointIdx,
+  calculatePointsAreas
   //something
 } from "../solution-pt1";
 import { Area } from "../area.class";
@@ -69,11 +70,10 @@ describe("day six", () => {
     const testArea = new Area(origin);
 
     testArea.increase();
-    testArea.increase(3);
     testArea.isInfinite();
 
     const expected = {
-      size: 5,
+      size: 1,
       infinite: true
     };
 
@@ -86,5 +86,19 @@ describe("day six", () => {
     const output = getClosestPointIdx(0, 0, points);
 
     expect(output).toBe(0);
+  });
+
+  test("it must calculate points areas", () => {
+    const borderPoint = getBorderPoint(testData);
+    const matrix = createMatrix(borderPoint);
+    const pointsCoords = convertPoints(testData);
+    const output = calculatePointsAreas(matrix, pointsCoords);
+
+    const expected = {
+      size: 17,
+      infinite: false
+    };
+
+    expect(output[4].info()).toEqual(expect.objectContaining(expected));
   });
 });
