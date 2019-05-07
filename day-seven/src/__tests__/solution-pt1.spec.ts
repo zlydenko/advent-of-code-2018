@@ -1,6 +1,8 @@
 import inputLoader from '../inputLoader';
 import { parseInput, sortInput } from '../solution-pt1';
 
+import { Node } from '../types';
+
 describe('day 7: part one', () => {
   const testData = [
     'Step C must be finished before step A can begin.',
@@ -39,5 +41,17 @@ describe('day 7: part one', () => {
     expect(output[0]).toBe(expected[0]);
     expect(output[2]).toBe(expected[2]);
     expect(output[6]).toBe(expected[6]);
+  });
+
+  test('create valid Node', () => {
+    const output = new Node('B', new Node('A'));
+
+    expect(output).toBeInstanceOf(Node);
+    expect(output.value).toBe('B');
+    expect(output.next).not.toBeNull();
+
+    if (output.next !== null) {
+      expect(output.next.value).toBe('A');
+    }
   });
 });
