@@ -1,36 +1,26 @@
-import inputLoader from "../inputLoader";
-import {
-  getBorderPoint,
-  createMatrix,
-  convertPoints,
-  calculateManhattanDistance,
-  getClosestPointIdx,
-  calculatePointsAreas,
-  getLargestFiniteAreaSize
-} from "../solution-pt1";
+import inputLoader from '../inputLoader';
+import { getBorderPoint, createMatrix, convertPoints, calculateManhattanDistance, getClosestPointIdx, calculatePointsAreas, getLargestFiniteAreaSize } from '../solution-pt1';
 
-import { Area } from "../area.class";
-
-describe("day six", () => {
+describe('day six', () => {
   let data: string[][] = [];
-  let testData = [["1", "1"], ["1", "6"], ["8", "3"], ["3", "4"], ["5", "5"], ["8", "9"]];
+  let testData = [['1', '1'], ['1', '6'], ['8', '3'], ['3', '4'], ['5', '5'], ['8', '9']];
 
   beforeAll(async () => {
     data = await inputLoader();
   });
 
-  test("it must load data", () => {
+  test('it must load data', () => {
     expect(data).toHaveLength(50);
   });
 
-  test("it must get border point of matrix", () => {
+  test('it must get border point of matrix', () => {
     const output = getBorderPoint(testData);
     const expected = { x: 9, y: 9 };
 
     expect(output).toEqual(expect.objectContaining(expected));
   });
 
-  test("it must build matrix", () => {
+  test('it must build matrix', () => {
     const borderPoint = getBorderPoint(testData);
     const output = createMatrix(borderPoint);
 
@@ -38,7 +28,7 @@ describe("day six", () => {
     expect(output[0]).toHaveLength(10);
   });
 
-  test("it must convert points", () => {
+  test('it must convert points', () => {
     const output = convertPoints(testData);
     const expected = {
       x: 1,
@@ -48,7 +38,7 @@ describe("day six", () => {
     expect(output[0]).toEqual(expect.objectContaining(expected));
   });
 
-  test("it must calculate Manhattan distance", () => {
+  test('it must calculate Manhattan distance', () => {
     const originPoint = {
       x: 1,
       y: 1
@@ -63,33 +53,14 @@ describe("day six", () => {
     expect(output).toBe(expected);
   });
 
-  test("it must create valid Area", () => {
-    const origin = {
-      x: 1,
-      y: 1
-    };
-    const testArea = new Area(origin);
-
-    testArea.increase();
-    testArea.isInfinite();
-
-    const expected = {
-      size: 1,
-      infinite: true
-    };
-
-    expect(testArea).toBeInstanceOf(Area);
-    expect(testArea.info()).toEqual(expect.objectContaining(expected));
-  });
-
-  test("it must get closest point idx", () => {
+  test('it must get closest point idx', () => {
     const points = convertPoints(testData);
     const output = getClosestPointIdx(0, 0, points);
 
     expect(output).toBe(0);
   });
 
-  test("it must calculate points areas", () => {
+  test('it must calculate points areas', () => {
     const borderPoint = getBorderPoint(testData);
     const matrix = createMatrix(borderPoint);
     const pointsCoords = convertPoints(testData);
@@ -103,7 +74,7 @@ describe("day six", () => {
     expect(output[4].info()).toEqual(expect.objectContaining(expected));
   });
 
-  test("it must get size of largest finite area", () => {
+  test('it must get size of largest finite area', () => {
     const borderPoint = getBorderPoint(data);
     const matrix = createMatrix(borderPoint);
     const pointsCoords = convertPoints(data);
