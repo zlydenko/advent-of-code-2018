@@ -26,10 +26,12 @@ describe('day 7: part one', () => {
 
   test('parse input data', () => {
     const output = parseInput(testData);
-    const expected = [['C', 'A'], ['C', 'F'], ['A', 'B']];
+    const expected = ['CA', 'CF', 'AB'];
 
-    expect(output[0]).toEqual(expect.arrayContaining(expected[0]));
-    expect(output[1]).toEqual(expect.arrayContaining(expected[1]));
-    expect(output[2]).toEqual(expect.arrayContaining(expected[2]));
+    expect(output[0]).toBe(expected[0]);
+    expect(output[1]).toBe(expected[1]);
+    expect(output[2]).toBe(expected[2]);
   });
+
+  // test('sorting ');
 });
