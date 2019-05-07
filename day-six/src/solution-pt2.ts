@@ -11,7 +11,7 @@ export const isPointInRegion = (sum: number, region: SafeRegion): boolean => {
   return sum < region.getMaxDistance();
 };
 
-export const calculateSafeRegion = (matrix: any[][], points: coords[], regionInstance: SafeRegion): SafeRegion => {
+export const calculateSafeRegion = (matrix: any[][], points: coords[], regionInstance: SafeRegion): void => {
   const width = matrix.length - 1;
   const height = matrix[0].length - 1;
 
@@ -25,6 +25,4 @@ export const calculateSafeRegion = (matrix: any[][], points: coords[], regionIns
       }
     }
   }
-
-  return regionInstance;
 };

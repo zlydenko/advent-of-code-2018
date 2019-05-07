@@ -1,3 +1,4 @@
+import inputLoader from '../inputLoader';
 import { SafeRegion } from '../types';
 import { convertPoints, getBorderPoint, createMatrix } from '../solution-pt1';
 import { calculateSumManhattanDistances, isPointInRegion, calculateSafeRegion } from '../solution-pt2';
@@ -26,14 +27,33 @@ describe('day 6: part two', () => {
     expect(output).toBe(true);
   });
 
-  test('it must create valid region from test matrix', () => {
+  test('create valid region from test matrix', () => {
     const borderPoint = getBorderPoint(testDataRaw);
     const matrix = createMatrix(borderPoint);
     const testRegion = new SafeRegion();
     testRegion._changeDistance(32);
-    const output = calculateSafeRegion(matrix, testData, testRegion);
 
-    expect(output).toBeInstanceOf(SafeRegion);
-    expect(output.getSize()).toBe(16);
+    calculateSafeRegion(matrix, testData, testRegion);
+
+    expect(testRegion).toBeInstanceOf(SafeRegion);
+    expect(testRegion.getSize()).toBe(16);
+  });
+
+  test('solution for part two', async () => {
+    try {
+      const data = await inputLoader();
+      const parsedData = convertPoints(data);
+      const borderPoint = getBorderPoint(data);
+      const matrix = createMatrix(borderPoint);
+      const region = new SafeRegion();
+
+      calculateSafeRegion(matrix, parsedData, region);
+
+      console.log(region.getSize());
+
+      expect(region).toBeInstanceOf(SafeRegion);
+    } catch (error) {
+      throw error;
+    }
   });
 });
