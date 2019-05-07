@@ -3,7 +3,7 @@ import { getBorderPoint, createMatrix, convertPoints, calculateManhattanDistance
 
 describe('day six', () => {
   let data: string[][] = [];
-  let testData = [['1', '1'], ['1', '6'], ['8', '3'], ['3', '4'], ['5', '5'], ['8', '9']];
+  const testData = [['1', '1'], ['1', '6'], ['8', '3'], ['3', '4'], ['5', '5'], ['8', '9']];
 
   beforeAll(async () => {
     data = await inputLoader();

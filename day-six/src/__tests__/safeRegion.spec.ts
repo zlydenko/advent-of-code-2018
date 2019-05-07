@@ -1,4 +1,4 @@
-import { SafeRegion } from '../safeRegion.class';
+import { SafeRegion } from '../types';
 
 describe('safe region instance', () => {
   test('it must create valid safe region', () => {

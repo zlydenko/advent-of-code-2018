@@ -1,9 +1,4 @@
-import { Area } from "./area.class";
-
-export type coords = {
-  x: number;
-  y: number;
-};
+import { coords, Area } from './types';
 
 export const getBorderPoint = (points: string[][]): coords => {
   const maxValue: number = +points
@@ -41,9 +36,7 @@ export const getClosestPointIdx = (x: number, y: number, points: coords[]): numb
     const manhattanDistance = calculateManhattanDistance({ x, y }, point);
     const idsWithSameDistance = distances.get(manhattanDistance);
 
-    idsWithSameDistance
-      ? distances.set(manhattanDistance, [...idsWithSameDistance, idx])
-      : distances.set(manhattanDistance, [idx]);
+    idsWithSameDistance ? distances.set(manhattanDistance, [...idsWithSameDistance, idx]) : distances.set(manhattanDistance, [idx]);
   });
 
   const [_, closestDistanceIds]: [number, number[]] = Array.from(distances).sort((a, b) => {

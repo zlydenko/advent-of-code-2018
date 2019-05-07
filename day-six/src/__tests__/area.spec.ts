@@ -1,4 +1,4 @@
-import { Area } from '../area.class';
+import { Area } from '../types';
 
 describe('area instance', () => {
   test('it must create valid Area', () => {
