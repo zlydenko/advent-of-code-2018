@@ -1,7 +1,7 @@
 import inputLoader from '../inputLoader';
-import { parseInput, sortInput } from '../solution-pt1';
+import { parseInput } from '../solution-pt1';
 
-import { Node, Instructions } from '../types';
+// import { Node, Instructions } from '../types';
 
 describe('day 7: part one', () => {
   const testData = [
@@ -31,15 +31,5 @@ describe('day 7: part one', () => {
     const expected = ['CA', 'CF', 'AB'];
 
     expect(output).toEqual(expect.arrayContaining(expected));
-  });
-
-  test('sorting parsed data', () => {
-    const parsedData = parseInput(testData);
-    const output = sortInput(parsedData);
-    const expected = ['AB', 'AD', 'BE', 'CA', 'CF', 'DE', 'FE'];
-
-    expect(output[0]).toBe(expected[0]);
-    expect(output[2]).toBe(expected[2]);
-    expect(output[6]).toBe(expected[6]);
   });
 });
