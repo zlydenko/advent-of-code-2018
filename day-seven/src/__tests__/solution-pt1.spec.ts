@@ -1,7 +1,7 @@
 import inputLoader from '../inputLoader';
 import { parseInput } from '../solution-pt1';
 
-import { InstructionsTree } from '../types';
+import { BIT } from '../types';
 
 describe('day 7: part one', () => {
   const testData = [
@@ -33,15 +33,21 @@ describe('day 7: part one', () => {
     expect(output).toEqual(expect.arrayContaining(expected));
   });
 
-  // test('creates tree', () => {
-  //   const tree = new InstructionsTree('A');
-  //   const output = tree
-  //     .addLeft('B')
-  //     .addRight('D')
-  //     .showConnections();
+  test('creates tree', () => {
+    const nodeA = new BIT('A');
+    const nodeC = new BIT('C');
+    const nodeF = new BIT('F');
+    const nodeB = new BIT('B');
+    const nodeD = new BIT('D');
 
-  //   console.log(output);
+    nodeA.addInstructions(nodeD).addInstructions(nodeB);
+    nodeC.addInstructions(nodeF).addInstructions(nodeA);
 
-  //   expect(output).toHaveLength(2);
-  // });
+    console.log('A');
+    console.log(nodeA.toString());
+    console.log('C');
+    console.log(nodeC.toString());
+
+    expect(nodeC).toBeInstanceOf(BIT);
+  });
 });
