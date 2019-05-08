@@ -56,4 +56,12 @@ export class BIT {
       `;
     return result;
   }
+
+  isStartNode(): boolean {
+    if (this.head !== null) {
+      return this.value === this.head.value;
+    } else {
+      throw new Error('something went wrong');
+    }
+  }
 }

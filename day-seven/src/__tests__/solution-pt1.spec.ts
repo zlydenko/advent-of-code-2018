@@ -1,5 +1,5 @@
 import inputLoader from '../inputLoader';
-import { parseInput, generateRelationsMap } from '../solution-pt1';
+import { parseInput, generateRelationsMap, buildBIT, findStartNode } from '../solution-pt1';
 
 import { BIT } from '../types';
 
@@ -56,5 +56,23 @@ describe('day 7: part one', () => {
 
     expect(output.get('A')).toEqual(expect.arrayContaining(nodeA));
     expect(output.get('C')).toEqual(expect.arrayContaining(nodeC));
+  });
+
+  test('it must generate main BIT', () => {
+    const parsedInput = parseInput(testData);
+    const relations = generateRelationsMap(parsedInput);
+    const output = buildBIT(relations);
+
+    expect(output).toBeInstanceOf(Map);
+    expect(Array.from(output)).toHaveLength(6);
+  });
+
+  test('it must find main node', () => {
+    const parsedInput = parseInput(testData);
+    const relations = generateRelationsMap(parsedInput);
+    const instructionsTreesMap = buildBIT(relations);
+    const output = findStartNode(instructionsTreesMap);
+
+    expect(output.isStartNode()).toBe(true);
   });
 });
