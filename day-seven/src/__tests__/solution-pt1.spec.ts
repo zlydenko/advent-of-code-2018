@@ -1,7 +1,7 @@
 import inputLoader from '../inputLoader';
 import { parseInput } from '../solution-pt1';
 
-// import { Node, Instructions } from '../types';
+import { InstructionsTree } from '../types';
 
 describe('day 7: part one', () => {
   const testData = [
@@ -32,4 +32,16 @@ describe('day 7: part one', () => {
 
     expect(output).toEqual(expect.arrayContaining(expected));
   });
+
+  // test('creates tree', () => {
+  //   const tree = new InstructionsTree('A');
+  //   const output = tree
+  //     .addLeft('B')
+  //     .addRight('D')
+  //     .showConnections();
+
+  //   console.log(output);
+
+  //   expect(output).toHaveLength(2);
+  // });
 });
