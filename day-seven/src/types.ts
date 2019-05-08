@@ -49,12 +49,30 @@ export class BIT {
     return values.reduce((acc: any[], val: any) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), []);
   }
 
+  getValue(): string {
+    return this.value;
+  }
+
   toString(): string {
-    let result = `Node ${this.value} have branches:
-      on the left(${this.left === null ? '0' : this.left.length}): ${this.left !== null ? this.left.map(node => node.value).join(', ') : ''};
-      on the right: ${this.right !== null ? this.right.value : ''}
-      `;
-    return result;
+    //? take value
+    let str = this.value;
+    //? traverse through all left first
+    if (this.left) {
+      this.left.forEach(leftNode => {
+        if (!leftNode.isLastNode()) {
+          str += leftNode.toString();
+        }
+      });
+    }
+
+    if (this.right) {
+      if (!this.right.isLastNode()) {
+        //? add right value
+        str += this.right.toString();
+      }
+    }
+
+    return str;
   }
 
   isStartNode(): boolean {
@@ -63,5 +81,9 @@ export class BIT {
     } else {
       throw new Error('something went wrong');
     }
+  }
+
+  isLastNode(): boolean {
+    return this.right === null && this.left === null;
   }
 }

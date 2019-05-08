@@ -13,12 +13,12 @@ const inputLoader = (): Promise<Buffer> =>
   });
 
 //! why i cant choose type Promise<Array<[string,string]>>
-export default async function(): Promise<string[][]> {
+export default async function(): Promise<string[]> {
   try {
     const data: Buffer = await inputLoader();
-    const dataInString: string = data.toString();
+    const dataInString: string[] = data.toString().split('\n');
 
-    return dataInString.split('\n').map(val => val.split(', '));
+    return dataInString;
   } catch (exception) {
     throw new Error(`Failed to load input data. ${exception.message}`);
   }

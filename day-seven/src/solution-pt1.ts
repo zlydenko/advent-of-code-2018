@@ -33,19 +33,25 @@ export const upsertBIT = (value: string, store: Map<string, BIT>): void => {
   }
 };
 
-export const findStartNode = (data: Map<string, BIT>): BIT => {
-  const result = Array.from(data).reduce((acc: BIT | null, [_, tree]) => {
-    if (acc === null) {
-      return tree;
-    } else {
-      return tree.isStartNode() ? tree : acc;
-    }
-  }, null);
+//? if something looking weird is because typescript type checker sometimes real bitch
+export const findBorderNodes = (data: Map<string, BIT>): { start: BIT; end: BIT } => {
+  const result = Array.from(data).reduce(
+    (acc: { start: BIT | null; end: BIT | null }, [_, tree]) => {
+      if (tree.isStartNode()) acc.start = tree;
+      if (tree.isLastNode()) acc.end = tree;
 
-  if (result === null) {
-    throw new Error('something went wrong');
+      return acc;
+    },
+    { start: null, end: null }
+  );
+
+  if (result.start && result.end) {
+    return {
+      start: result.start,
+      end: result.end
+    };
   } else {
-    return result;
+    throw new Error('something went wrong');
   }
 };
 
@@ -72,4 +78,23 @@ export const buildBIT = (data: Map<string, string[]>): Map<string, BIT> => {
   });
 
   return trees;
+};
+
+export const BITStr = (borderNodes: { start: BIT; end: BIT }): void => {
+  let node = borderNodes.start;
+  while (true) {
+    if (node.isLastNode()) {
+      console.log(node.getValue());
+      console.log('EOF');
+      break;
+    }
+
+    const leftNodes = node.left;
+    const rightNode = node.right;
+
+    leftNodes.forEach();
+
+    // console.log(node.getValue())
+    // node =
+  }
 };
