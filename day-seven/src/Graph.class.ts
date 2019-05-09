@@ -31,4 +31,16 @@ export default class Graph {
       return vertex.getEdges().length === 0;
     })[0];
   }
+
+  getStartVertex(): GraphVertex {
+    return this.vertices.filter(vertex => {
+      const checkingVertexValue = vertex.toString();
+
+      const foundEdges = this.edges.filter(edge => {
+        return edge.getVertices()[1].toString() === checkingVertexValue;
+      });
+
+      return foundEdges.length === 0;
+    })[0];
+  }
 }
