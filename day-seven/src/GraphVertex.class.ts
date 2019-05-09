@@ -1,5 +1,3 @@
-//? graph vertex A
-//? graph vertex B
 export default class GraphVertex {
   private value: string;
 
