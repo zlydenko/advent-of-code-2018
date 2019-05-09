@@ -67,8 +67,6 @@ describe("graph", () => {
       .addEdge(edgeCD)
       .addEdge(edgeBD);
 
-    // console.log(graph.getStartVertex());
-
     expect(graph.getStartVertex().toString()).toBe("A");
   });
 });

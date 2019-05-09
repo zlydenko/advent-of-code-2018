@@ -11,10 +11,11 @@ export default class Graph {
   }
 
   addEdge(e: GraphEdge): Graph {
-    this.edges = [...this.edges, e];
     const edgeVertices = e.getVertices();
+
+    this.edges = [...this.edges, e];
     edgeVertices[0].addEdge(e);
-    //? we need add edges to vertex
+
     return this;
   }
 
