@@ -6,7 +6,7 @@
   "scripts": {
     "ts:w": "tsc -w",
     "start": "node -r esm day-seven/src/solution-pt1",
-    "test": "jest day-seven/src/__tests__/solution-pt1.spec.ts"
+    "test": "jest day-seven/src/__tests__/GraphVertex.spec.ts"
   },
   "keywords": [],
   "author": "",
