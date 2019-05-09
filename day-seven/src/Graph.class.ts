@@ -6,14 +6,14 @@ export default class Graph {
   private edges: GraphEdge[] = [];
 
   addVertex(v: GraphVertex): Graph {
-    this.vertices = [...this.vertices, v];
+    this.vertices = Array.from(new Set([...this.vertices, v]));
     return this;
   }
 
   addEdge(e: GraphEdge): Graph {
     const edgeVertices = e.getVertices();
 
-    this.edges = [...this.edges, e];
+    this.edges = Array.from(new Set([...this.edges, e]));
     edgeVertices[0].addEdge(e);
 
     return this;

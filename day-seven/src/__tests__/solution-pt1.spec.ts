@@ -1,5 +1,5 @@
 import inputLoader from "../inputLoader";
-import { parseInput } from "../solution-pt1";
+import { parseInput, createGraph } from "../solution-pt1";
 
 describe("day 7: part one", () => {
   const testData = [
@@ -22,5 +22,21 @@ describe("day 7: part one", () => {
     } catch (error) {
       throw error;
     }
+  });
+
+  test("parse the input", () => {
+    const output = parseInput(testData);
+
+    expect(output[0]).toBe("FE");
+    expect(output[6]).toBe("CF");
+    expect(output).toHaveLength(7);
+  });
+
+  test("create graph", () => {
+    const parsedInput = parseInput(testData);
+    const graph = createGraph(parsedInput);
+
+    expect(graph.getStartVertex().toString()).toBe("C");
+    expect(graph.getEndVertex().toString()).toBe("E");
   });
 });
