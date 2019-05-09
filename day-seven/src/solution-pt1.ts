@@ -13,27 +13,28 @@ export const parseInput = (input: string[]): string[] => {
 
 export const createGraph = (input: string[]): Graph => {
   const graph = new Graph();
-  const { vertices, edges } = input.reduce(
-    (acc, edgeStr) => {
-      const [startVertexStr, endVertexStr] = edgeStr.split("");
-      const startVertex = new GraphVertex(startVertexStr);
-      const endVertex = new GraphVertex(endVertexStr);
-      const edge = new GraphEdge(startVertex, endVertex);
+  const vertices = new Map();
 
-      if (!acc.vertices.has(startVertex)) acc.vertices.add(startVertex);
-      if (!acc.vertices.has(endVertex)) acc.vertices.add(endVertex);
-      if (!acc.edges.has(edge)) acc.edges.add(edge);
+  input.forEach(edgeStr => {
+    const [startVertexStr, endVertexStr] = edgeStr.split("");
+    const startVertex = vertices.get(startVertexStr);
+    const endVertex = vertices.get(endVertexStr);
 
-      return acc;
-    },
-    {
-      vertices: new Set(),
-      edges: new Set()
+    if (!startVertex) {
+      const vertex = new GraphVertex(startVertexStr);
+      vertices.set(startVertexStr, vertex);
+      graph.addVertex(vertex);
     }
-  );
 
-  vertices.forEach(vertex => graph.addVertex(vertex));
-  edges.forEach(edge => graph.addEdge(edge));
+    if (!endVertex) {
+      const vertex = new GraphVertex(endVertexStr);
+      vertices.set(endVertexStr, vertex);
+      graph.addVertex(vertex);
+    }
+
+    const edge = new GraphEdge(vertices.get(startVertexStr), vertices.get(endVertexStr));
+    graph.addEdge(edge);
+  });
 
   return graph;
 };

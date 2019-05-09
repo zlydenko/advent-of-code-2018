@@ -39,4 +39,13 @@ describe("day 7: part one", () => {
     expect(graph.getStartVertex().toString()).toBe("C");
     expect(graph.getEndVertex().toString()).toBe("E");
   });
+
+  test("output graph in string (test data)", () => {
+    const parsedInput = parseInput(testData);
+    const graph = createGraph(parsedInput);
+    const output = graph.toString();
+    const expected = "CABDFE";
+
+    expect(output).toBe(expected);
+  });
 });
