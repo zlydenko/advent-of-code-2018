@@ -44,4 +44,11 @@ export default class Graph {
       return foundEdges.length === 0;
     })[0];
   }
+
+  toString(): string {
+    const startingVertex = this.getStartVertex();
+    const endingVertex = this.getEndVertex();
+
+    return "nothing";
+  }
 }

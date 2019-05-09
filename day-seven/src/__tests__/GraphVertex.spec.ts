@@ -1,5 +1,6 @@
 import GraphVertex from "../GraphVertex.class";
 import GraphEdge from "../GraphEdge.class";
+import Graph from "../Graph.class";
 
 describe("graph", () => {
   test("create graph vertex", () => {
@@ -36,4 +37,23 @@ describe("graph", () => {
 
     expect(edgesValues).toBe("A_B,A_C");
   });
+
+  // test("add neighbors", () => {
+  //   const vertexA = new GraphVertex("A");
+  //   const vertexB = new GraphVertex("B");
+  //   const vertexC = new GraphVertex("C");
+  //   const edgeAB = new GraphEdge(vertexA, vertexB);
+  //   const edgeBC = new GraphEdge(vertexB, vertexC);
+
+  //   vertexA.addEdge(edgeAB);
+  //   vertexB.addEdge(edgeBC);
+  //   vertexB.addNeighbor({ prev: vertexA, next: vertexC });
+
+  //   const expected = {
+  //     prev: vertexA,
+  //     next: vertexC
+  //   };
+
+  //   expect(vertexB.getNeighbors()).toEqual(expect.objectContaining(expected));
+  // });
 });
