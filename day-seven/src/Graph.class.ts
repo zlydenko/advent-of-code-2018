@@ -92,12 +92,12 @@ export default class Graph {
     }
   }
 
-  getVertex(value: any): Vertex {
+  getVertex(value: any): Vertex | null {
     const vertex = Array.from(this.vertices).filter(currentVertex => {
       return currentVertex.value === value;
     })[0];
 
-    return vertex;
+    return vertex ? vertex : null;
   }
 
   startVertex(): Vertex {
