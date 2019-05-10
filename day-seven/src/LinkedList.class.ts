@@ -13,12 +13,17 @@ export class LinkedListNode {
 }
 
 export default class LinkedList {
-  head: LinkedListNode | null;
-  tail: LinkedListNode | null;
+  head: LinkedListNode | null = null;
+  tail: LinkedListNode | null = null;
+  private size: number = 0;
 
-  constructor() {
-    this.head = null;
-    this.tail = null;
+  constructor(initialValue?: any) {
+    if (initialValue) {
+      const node = new LinkedListNode(initialValue);
+      this.head = node;
+      this.tail = node;
+      this.size = 1;
+    }
   }
 
   appendNode(value: any): LinkedList {
@@ -34,6 +39,8 @@ export default class LinkedList {
       this.tail = node;
     }
 
+    this.size++;
+
     return this;
   }
 
@@ -44,6 +51,8 @@ export default class LinkedList {
     if (!this.tail) {
       this.tail = node;
     }
+
+    this.size++;
 
     return this;
   }
@@ -77,6 +86,12 @@ export default class LinkedList {
       this.tail = currentNode;
     }
 
+    this.size--;
+
     return this;
+  }
+
+  length(): number {
+    return this.size;
   }
 }

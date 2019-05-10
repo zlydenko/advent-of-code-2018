@@ -56,4 +56,26 @@ describe('Linked List', () => {
       throw new Error('failed to delete elements to list');
     }
   });
+
+  test('create linked list with initial value', () => {
+    const elem = 'a';
+    const list = new LinkedList(elem);
+
+    if (list.head && list.tail) {
+      expect(list.head.value).toBe('a');
+      expect(list.tail.value).toBe('a');
+    } else {
+      throw new Error('failed to create list with initial value');
+    }
+  });
+
+  test('get linked list size', () => {
+    const elements = ['a', 'b', 'c', 'd'];
+    const list = new LinkedList();
+
+    elements.forEach(elem => list.appendNode(elem));
+    list.deleteNode((x: string) => x === 'd');
+
+    expect(list.length()).toBe(3);
+  });
 });
