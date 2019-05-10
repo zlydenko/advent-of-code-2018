@@ -78,4 +78,15 @@ describe('Linked List', () => {
 
     expect(list.length()).toBe(3);
   });
+
+  test('is linked list empty', () => {
+    const element = 'a';
+    const list = new LinkedList();
+
+    expect(list.isEmpty()).toBe(true);
+    list.appendNode(element);
+    expect(list.isEmpty()).toBe(false);
+    list.deleteNode((x: any) => x === element);
+    expect(list.isEmpty()).toBe(true);
+  });
 });

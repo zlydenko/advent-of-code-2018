@@ -1,10 +1,13 @@
 export class LinkedListNode {
   value: any;
-  next: LinkedListNode | null;
+  next: LinkedListNode | null = null;
 
-  constructor(value: any, next: LinkedListNode | null = null) {
+  constructor(value: any) {
     this.value = value;
-    this.next = next;
+  }
+
+  setNext(node: LinkedListNode) {
+    this.next = node;
   }
 
   toString(cb?: Function) {
@@ -29,13 +32,11 @@ export default class LinkedList {
   appendNode(value: any): LinkedList {
     const node = new LinkedListNode(value);
 
-    if (!this.head) {
+    if (this.isEmpty()) {
       this.head = node;
       this.tail = node;
-    }
-
-    if (this.tail) {
-      this.tail.next = node;
+    } else {
+      this.tail && this.tail.setNext(node);
       this.tail = node;
     }
 
@@ -45,10 +46,17 @@ export default class LinkedList {
   }
 
   prependNode(value: any): LinkedList {
-    const node = new LinkedListNode(value, this.head);
-    this.head = node;
+    if (this.head) {
+      const node = new LinkedListNode(value);
+      node.setNext(this.head);
+      this.head = node;
 
-    if (!this.tail) {
+      if (!this.tail) {
+        this.tail = node;
+      }
+    } else {
+      const node = new LinkedListNode(value);
+      this.head = node;
       this.tail = node;
     }
 
@@ -93,5 +101,9 @@ export default class LinkedList {
 
   length(): number {
     return this.size;
+  }
+
+  isEmpty(): boolean {
+    return this.size === 0;
   }
 }
