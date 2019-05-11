@@ -3,6 +3,6 @@ export const parseInput = (input: string[]): string[] => {
   const regPattern = new RegExp(/(?<!^)[A-Z]/g);
   return input.map(str => {
     const keys = str.match(regPattern);
-    return keys === null ? "" : keys.join("");
+    return keys === null ? '' : keys.join('');
   });
 };
