@@ -84,4 +84,25 @@ describe('Graph', () => {
 
     expect(graph.edgesQuantity()).toBe(7);
   });
+
+  test('get a start vertex from graph', () => {
+    const graph = new Graph();
+    const edges = ['CA', 'CF', 'AB', 'AD', 'BE', 'DE', 'FE'];
+
+    edges.forEach(edge => {
+      const [from, to] = edge.split('');
+      let fromVertex = graph.getVertex(from);
+      let toVertex = graph.getVertex(to);
+      if (!fromVertex) {
+        fromVertex = graph.createVertex(from);
+      }
+      if (!toVertex) {
+        toVertex = graph.createVertex(to);
+      }
+
+      graph.createEdge({ from: fromVertex, to: toVertex });
+    });
+
+    expect(graph.startVertex().value).toBe('C');
+  });
 });
