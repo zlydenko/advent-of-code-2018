@@ -54,21 +54,25 @@ export default class Graph {
   private vertices: Set<Vertex> = new Set();
   private edges: Set<Edge> = new Set();
 
-  createVertex(value: any): Vertex {
-    const vertex = new Vertex(value);
-    !this.vertices.has(vertex) && this.vertices.add(vertex);
-
-    return vertex;
+  upsertVertex(value: any): Vertex {
+    const vertex = this.getVertex(value);
+    if (vertex) {
+      return vertex;
+    } else {
+      const newVertex = new Vertex(value);
+      this.vertices.add(newVertex);
+      return newVertex;
+    }
   }
 
-  createEdge(args: { from: Vertex; to: Vertex }): Edge {
-    if (args.from && args.to) {
-      const edge = new Edge(args.from, args.to);
-      !this.edges.has(edge) && this.edges.add(edge);
-
+  upsertEdge(args: { from: Vertex; to: Vertex }): Edge {
+    const edge = this.getEdge({ from: args.from, to: args.to });
+    if (edge) {
       return edge;
     } else {
-      throw new Error('you need to provide 2 vertices for edge');
+      const newEdge = new Edge(args.from, args.to);
+      this.edges.add(newEdge);
+      return newEdge;
     }
   }
 
@@ -90,6 +94,14 @@ export default class Graph {
     } else {
       throw new Error('you need to provide from and to values');
     }
+  }
+
+  getEdge(args: { from: Vertex; to: Vertex }): Edge | null {
+    const edge = Array.from(this.edges).filter(currentEdge => {
+      return currentEdge.from === args.from && currentEdge.to === args.to;
+    })[0];
+
+    return edge ? edge : null;
   }
 
   getVertex(value: any): Vertex | null {

@@ -55,11 +55,7 @@ describe('Graph', () => {
     const graph = new Graph();
     const elements = ['A', 'B', 'C', 'A', 'B'];
 
-    elements.forEach(element => {
-      if (!graph.hasVertex(element)) {
-        graph.createVertex(element);
-      }
-    });
+    elements.forEach(element => graph.upsertVertex(element));
 
     expect(graph.verticesQuantity()).toBe(3);
   });
@@ -70,16 +66,10 @@ describe('Graph', () => {
 
     edges.forEach(edge => {
       const [from, to] = edge.split('');
-      let fromVertex = graph.getVertex(from);
-      let toVertex = graph.getVertex(to);
-      if (!fromVertex) {
-        fromVertex = graph.createVertex(from);
-      }
-      if (!toVertex) {
-        toVertex = graph.createVertex(to);
-      }
+      let fromVertex = graph.upsertVertex(from);
+      let toVertex = graph.upsertVertex(to);
 
-      graph.createEdge({ from: fromVertex, to: toVertex });
+      graph.upsertEdge({ from: fromVertex, to: toVertex });
     });
 
     expect(graph.edgesQuantity()).toBe(7);
@@ -91,16 +81,10 @@ describe('Graph', () => {
 
     edges.forEach(edge => {
       const [from, to] = edge.split('');
-      let fromVertex = graph.getVertex(from);
-      let toVertex = graph.getVertex(to);
-      if (!fromVertex) {
-        fromVertex = graph.createVertex(from);
-      }
-      if (!toVertex) {
-        toVertex = graph.createVertex(to);
-      }
+      let fromVertex = graph.upsertVertex(from);
+      let toVertex = graph.upsertVertex(to);
 
-      graph.createEdge({ from: fromVertex, to: toVertex });
+      graph.upsertEdge({ from: fromVertex, to: toVertex });
     });
 
     expect(graph.startVertex().value).toBe('C');
