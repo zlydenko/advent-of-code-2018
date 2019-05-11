@@ -1,7 +1,10 @@
+import Stack from './Stack.class';
+
 export class Vertex {
   value: any;
   dependencies: Set<any> = new Set();
   childs: Set<any> = new Set();
+  private completed: boolean = false;
 
   constructor(value: any) {
     this.value = value;
@@ -17,6 +20,14 @@ export class Vertex {
     this.childs.add(child);
 
     return this;
+  }
+
+  isComplete(): boolean {
+    return this.completed;
+  }
+
+  complete(): void {
+    this.completed = false;
   }
 
   hasDependencies(): boolean {
@@ -36,8 +47,6 @@ export class Edge {
     this.from = from;
     this.to = to;
 
-    //? from get a child
-    //? to get a dependency
     this.from.addChild(this.to);
     this.to.addDependency(this.from);
   }
@@ -133,5 +142,31 @@ export default class Graph {
 
   edgesQuantity(): number {
     return this.edges.size;
+  }
+
+  toString(): string {
+    const stack = new Stack();
+    let result = '';
+    let currentVertex = this.startVertex();
+    let availableVertices = new Set();
+    let flag = false;
+
+    const goThroughVertex = (vertex: Vertex) => {
+      stack.push(vertex.value);
+      result += vertex.value;
+      vertex.complete();
+    };
+
+    while (!flag) {
+      //? check if current vertex have dependencies
+      const currentVertexHasDependencies = currentVertex.hasDependencies();
+      const currentVertexHasChilds = currentVertex.hasChilds();
+
+      if (!currentVertexHasDependencies) {
+        goThroughVertex(currentVertex);
+      }
+    }
+
+    return 'nothing';
   }
 }
