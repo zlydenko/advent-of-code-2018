@@ -1,3 +1,5 @@
+import { process } from 'uniqid';
+
 const worksGenerator = function*(works: string[], workers: number): Iterable<any> {
   const FIRST_LETTER_CODE = 65;
   let currentSecond = 0;
@@ -16,6 +18,10 @@ const worksGenerator = function*(works: string[], workers: number): Iterable<any
       .sort((a, b) => +a.split('-')[1] - +b.split('-')[1]);
   }
 };
+
+type ID = string;
+
+export const generateId = (): ID => process();
 
 interface Work {
   dependencies: Array<string>;
@@ -38,6 +44,8 @@ interface Worker {
 export class Schedule {
   works: Map<string, Work>;
   workers: Map<number, Worker>;
+  currentTime: number = 0;
+  tasks: Task[] = [];
 
   constructor(data: string[][], workersQuantity: number) {
     this.works = this._populateWorks(data);
@@ -119,14 +127,6 @@ export class Schedule {
     };
   }
 
-  private _completeWork(s: string): void {
-    const work = this.works.get(s);
-
-    if (work) {
-      this.works.set(s, { ...work, done: true });
-    }
-  }
-
   appointTask(s: string, workerId: number, currentTime: number) {
     const worker = this.workers.get(workerId);
     const work = this.works.get(s);
@@ -137,7 +137,7 @@ export class Schedule {
         currentTask: task,
         busy: true
       });
-      this._completeWork(s);
+      this.tasks.push(task);
     } else if (!worker) {
       throw new Error(`worker with id ${workerId} not found`);
     } else if (!work) {
@@ -145,6 +145,17 @@ export class Schedule {
     } else {
       throw new Error('unexpected error');
     }
+  }
+
+  info(): void {
+    console.log('CURRENT TIME');
+    console.log(this.currentTime);
+    console.log('WORKS');
+    console.log(this.works);
+    console.log('WORKERS');
+    console.log(this.workers);
+    console.log('TASKS');
+    console.log(this.tasks);
   }
 
   // traverseSchedule() {

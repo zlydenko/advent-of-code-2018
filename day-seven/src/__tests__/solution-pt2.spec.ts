@@ -1,5 +1,5 @@
 import { parseInput } from '../solution-pt1';
-import { Schedule } from '../solution-pt2';
+import { Schedule, generateId } from '../solution-pt2';
 
 describe('day 7, part 2', () => {
   const testData = [
@@ -37,15 +37,20 @@ describe('day 7, part 2', () => {
     expect(schedule.getAvailableWorkers()).toEqual(expect.arrayContaining([2, 3, 4, 5]));
   });
 
-  test('get available works', () => {
-    const parsedInput = parseInput(testData);
-    const schedule = new Schedule(parsedInput, 5);
-    schedule.appointTask('C', 1, 5);
-    const availableWorks = schedule.getAvailableWorks();
+  test('generate id', () => {
+    const id = generateId();
 
-    console.log(schedule.works);
-    console.log(schedule.workers);
-
-    // expect(availableWorks).toHaveLength(0);
+    console.log(id);
   });
+
+  // test('get available works', () => {
+  //   const parsedInput = parseInput(testData);
+  //   const schedule = new Schedule(parsedInput, 5);
+  //   schedule.appointTask('C', 1, 5);
+  //   const availableWorks = schedule.getAvailableWorks();
+
+  //   schedule.info();
+
+  //   // expect(availableWorks).toHaveLength(0);
+  // });
 });
