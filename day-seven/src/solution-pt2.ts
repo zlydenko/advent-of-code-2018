@@ -41,6 +41,14 @@ interface Worker {
   busy: boolean;
 }
 
+/*
+
+tasks: List {id: info} //? current in progress tasks
+allTasks: List {id: info} //? all tasks with deps and estimated time
+workers: link workers current task by id on tasks
+
+*/
+
 export class Schedule {
   works: Map<string, Work>;
   workers: Map<number, Worker>;
