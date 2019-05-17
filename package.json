@@ -6,7 +6,9 @@
   "scripts": {
     "ts:w": "tsc -w",
     "start": "node -r esm day-seven/src/solution-pt2",
-    "test": "jest day-seven/src/__tests__/solution-pt2.spec.ts"
+    "test": "jest day-one/src/__tests__/index.spec.ts",
+    "postinstall": "link-module-alias",
+    "preinstall": "command -v link-module-alias && link-module-alias clean || true"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
     "@types/jest": "^24.0.11",
     "@types/node": "^11.12.2",
     "jest": "^24.5.0",
+    "link-module-alias": "^1.2.0",
     "ts-jest": "^24.0.1",
     "typescript": "^3.4.1"
   },
@@ -25,5 +28,8 @@
   },
   "jest": {
     "preset": "ts-jest"
+  },
+  "_moduleAliases": {
+    "~root"      : "."
   }
 }
