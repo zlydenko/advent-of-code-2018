@@ -1,4 +1,4 @@
-import { process } from 'uniqid';
+import nanoid from 'nanoid';
 
 enum ProgressStatus {
   done,
@@ -38,7 +38,7 @@ export class Schedule {
   }
 
   private _generateId(): string {
-    return process();
+    return nanoid(10);
   }
 
   private _getEstimatedTime(task: string): number {
