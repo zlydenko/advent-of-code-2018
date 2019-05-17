@@ -1,179 +1,212 @@
 import { process } from 'uniqid';
 
-const worksGenerator = function*(works: string[], workers: number): Iterable<any> {
-  const FIRST_LETTER_CODE = 65;
-  let currentSecond = 0;
-  let availableWorks = works;
-  let workersState = Array(workers)
-    .fill(null)
-    .reduce((acc, _, idx) => {
-      return { ...acc, [`worker-${idx + 1}`]: null };
-    }, {});
-  let currentWorks = {};
-
-  while (availableWorks.length) {
-    const availableWorkers: string[] = Object.entries(workersState)
-      .filter(([_, value]) => value === null)
-      .map(([key, _]) => key)
-      .sort((a, b) => +a.split('-')[1] - +b.split('-')[1]);
-  }
-};
-
-type ID = string;
-
-export const generateId = (): ID => process();
-
-interface Work {
-  dependencies: Array<string>;
-  completingTime: number;
-  done: boolean;
+enum ProgressStatus {
+  done,
+  inProgress,
+  available,
+  notAvailable
 }
 
 interface Task {
-  value: Work;
-  workerId: number;
-  startedAt: number;
+  value: string;
+  dependencies: string[];
+  status: ProgressStatus;
   estimatedTime: number;
+  startedAt: number | null;
 }
 
 interface Worker {
-  currentTask: Task | null;
+  position: number;
+  currentTask: string | null;
   busy: boolean;
 }
 
-/*
-
-tasks: List {id: info} //? current in progress tasks
-allTasks: List {id: info} //? all tasks with deps and estimated time
-workers: link workers current task by id on tasks
-
-*/
+interface Store<T> {
+  [id: string]: T;
+}
 
 export class Schedule {
-  works: Map<string, Work>;
-  workers: Map<number, Worker>;
-  currentTime: number = 0;
-  tasks: Task[] = [];
+  private workers: Store<Worker> = {};
+  private tasks: Store<Task> = {};
+  private initialTime: number = 0;
 
-  constructor(data: string[][], workersQuantity: number) {
-    this.works = this._populateWorks(data);
-    this.workers = this._populateWorkers(workersQuantity);
+  constructor(data: string[][], workersCount: number, initialTime?: number) {
+    this._storeTasks(data);
+    this._storeWorkers(workersCount);
+    this._checkTasksAvailability();
+    if (initialTime) this.initialTime = initialTime;
   }
 
-  private _getEstimatedTime(letter: string): number {
+  private _generateId(): string {
+    return process();
+  }
+
+  private _getEstimatedTime(task: string): number {
     const FIRST_LETTER_CODE = 65;
-    return 60 + (letter.charCodeAt(0) - FIRST_LETTER_CODE + 1);
+
+    return this.initialTime + task.charCodeAt(0) - FIRST_LETTER_CODE + 1;
   }
 
-  private _populateWorks(data: string[][]): Map<string, Work> {
-    const works = new Map();
-
-    data.forEach(([dependency, work]) => {
-      let createdStep = works.get(work);
-      let createdDependency = works.get(dependency);
-
-      if (!createdStep) {
-        works.set(work, { dependencies: [], completingTime: this._getEstimatedTime(work), done: false });
-        createdStep = works.get(work);
-      }
-
-      if (!createdDependency) {
-        works.set(dependency, { dependencies: [], completingTime: this._getEstimatedTime(dependency), done: false });
-        createdDependency = works.get(dependency);
-      }
-
-      createdStep.dependencies.push(dependency);
-    });
-
-    return works;
-  }
-
-  private _populateWorkers(q: number): Map<number, Worker> {
-    const workers = new Map();
-
-    Array.from({ length: q }, (_, idx) => idx + 1).forEach(id => {
-      workers.set(id, {
-        currentTask: null,
-        busy: false
-      });
-    });
-
-    return workers;
-  }
-
-  getWorks(): Map<string, Work> {
-    return this.works;
-  }
-
-  getAvailableWorks(): string[] {
-    const worksDone: string[] = Array.from(this.works)
-      .filter(([_, info]) => info.done)
-      .map(([key, _]) => key);
-    const dependenciesMet = (dependencies: string[]): boolean => {
-      return dependencies.filter((dep: string) => worksDone.includes(dep)).length === dependencies.length;
-    };
-
-    return Array.from(this.works)
-      .filter(([_, info]) => !info.done && dependenciesMet(info.dependencies))
-      .map(([key, _]) => key)
-      .sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0));
-  }
-
-  getAvailableWorkers(): number[] {
-    return Array.from(this.workers)
-      .filter(([_, info]) => !info.busy)
-      .map(([id, _]) => id)
-      .sort((a, b) => a - b);
-  }
-
-  private _createTask(work: Work, workerId: number, currentTime: number): Task {
+  private _getTaskByValue(s: string): { id: string; task: Task } {
+    const task = Object.entries(this.tasks).filter(([_, info]) => info.value === s);
     return {
-      value: { ...work },
-      workerId,
-      startedAt: currentTime,
-      estimatedTime: work.completingTime
+      id: task[0][0],
+      task: task[0][1]
     };
   }
 
-  appointTask(s: string, workerId: number, currentTime: number) {
-    const worker = this.workers.get(workerId);
-    const work = this.works.get(s);
+  private _storeTasks(data: string[][]): void {
+    data.forEach(([dependency, task]) => {
+      const ifTaskCreated: boolean = Object.entries(this.tasks).filter(([_, info]) => info.value === task).length > 0;
+      const ifDependencyCreated: boolean = Object.entries(this.tasks).filter(([_, info]) => info.value === dependency).length > 0;
 
-    if (worker && work) {
-      const task = this._createTask(work, workerId, currentTime);
-      this.workers.set(workerId, {
-        currentTask: task,
-        busy: true
-      });
-      this.tasks.push(task);
-    } else if (!worker) {
-      throw new Error(`worker with id ${workerId} not found`);
-    } else if (!work) {
-      throw new Error(`work ${s} not found`);
-    } else {
-      throw new Error('unexpected error');
+      if (!ifTaskCreated) {
+        this.tasks[this._generateId()] = {
+          value: task,
+          dependencies: [],
+          status: ProgressStatus.notAvailable,
+          estimatedTime: this._getEstimatedTime(task),
+          startedAt: null
+        };
+      }
+
+      if (!ifDependencyCreated) {
+        this.tasks[this._generateId()] = {
+          value: dependency,
+          dependencies: [],
+          status: ProgressStatus.notAvailable,
+          estimatedTime: this._getEstimatedTime(dependency),
+          startedAt: null
+        };
+      }
+
+      const createdTask = this._getTaskByValue(task);
+      const createdDependency = this._getTaskByValue(dependency);
+      createdTask.task.dependencies = [...createdTask.task.dependencies, createdDependency.id];
+    });
+  }
+
+  private _storeWorkers(workersCount: number): void {
+    this.workers = Array.from({ length: workersCount }, (_, idx) => {
+      return {
+        id: this._generateId(),
+        info: {
+          position: idx + 1,
+          currentTask: null,
+          busy: false
+        }
+      };
+    }).reduce((acc, { id, info }) => ({ ...acc, [id]: info }), {});
+  }
+
+  private _getFreeWorkerId(): string | null {
+    const sortedAvailableWorkers = Object.entries(this.workers)
+      .filter(([_, info]) => !info.busy)
+      .sort(([_, infoA], [_2, infoB]) => infoA.position - infoB.position);
+    return sortedAvailableWorkers.length ? sortedAvailableWorkers[0][0] : null;
+  }
+
+  private _getAvailableTasksId(): string[] {
+    const sortedAvailableTasks = Object.entries(this.tasks)
+      .filter(([_, info]) => info.status === ProgressStatus.available)
+      .sort(([_a, infoA], [_b, infoB]) => infoA.value.charCodeAt(0) - infoB.value.charCodeAt(0))
+      .map(([id, _]) => id);
+
+    return sortedAvailableTasks;
+  }
+
+  private _dependenciesMet(dependenciesIds: string[]): boolean {
+    return (
+      dependenciesIds.filter(dependencyId => {
+        return this.tasks[dependencyId].status === ProgressStatus.done;
+      }).length === dependenciesIds.length
+    );
+  }
+
+  private _checkTasksAvailability(): void {
+    Object.entries(this.tasks).forEach(([id, info]) => {
+      const { dependencies } = info;
+
+      if (info.status === ProgressStatus.notAvailable) {
+        if (dependencies.length) {
+          const isAvailable = this._dependenciesMet(dependencies);
+          if (isAvailable) {
+            info.status = ProgressStatus.available;
+          }
+        } else {
+          info.status = ProgressStatus.available;
+        }
+      }
+    });
+  }
+
+  private _checkTasksProgress(currentTime: number, progress: string): string {
+    let result = progress;
+
+    const currentInProgressTasks = Object.entries(this.tasks).filter(([_, info]) => info.status === ProgressStatus.inProgress);
+
+    for (let [currentTaskId, currentTaskInfo] of currentInProgressTasks) {
+      const { startedAt, estimatedTime, value } = currentTaskInfo;
+
+      if (startedAt === null) {
+        throw new Error('something weird happened');
+      } else {
+        if (currentTime === startedAt + estimatedTime) {
+          result += value;
+
+          this.tasks[currentTaskId].status = ProgressStatus.done;
+          const assignedWorkerId = Object.entries(this.workers).filter(([_, info]) => info.currentTask === currentTaskId)[0][0];
+
+          this.workers[assignedWorkerId].busy = false;
+          this.workers[assignedWorkerId].currentTask = null;
+        }
+      }
     }
+
+    return result;
   }
 
-  info(): void {
-    console.log('CURRENT TIME');
-    console.log(this.currentTime);
-    console.log('WORKS');
-    console.log(this.works);
-    console.log('WORKERS');
-    console.log(this.workers);
-    console.log('TASKS');
-    console.log(this.tasks);
+  private _tasksFinished(): boolean {
+    return Object.entries(this.tasks).every(([_, info]) => info.status === ProgressStatus.done);
   }
 
-  // traverseSchedule() {
-  //   let currentSecond = 0;
+  private _assignTaskToWorker(taskId: string, workerId: string, currentTime: number): void {
+    this.workers[workerId].busy = true;
+    this.workers[workerId].currentTask = taskId;
+    this.tasks[taskId].startedAt = currentTime;
+    this.tasks[taskId].status = ProgressStatus.inProgress;
+  }
 
-  //   while (works.size > 0) {
-  //     let availableWorkers = this.getAvailableWorkers();
-  //     let availableWorks: string[] = this.getAvailableWorks();
+  calculateCompletingTime(): { timeSpent: number; result: string } {
+    let currentTime = 0;
+    let result = '';
 
-  //     while (availableWorks.length) {}
-  //   }
-  // }
+    while (true) {
+      //todo get available task
+      const availableTasksId: string[] = this._getAvailableTasksId();
+
+      for (let availableTaskId of availableTasksId) {
+        //todo get available worker
+        const availableWorkerId = this._getFreeWorkerId();
+
+        if (availableWorkerId) {
+          this._assignTaskToWorker(availableTaskId, availableWorkerId, currentTime);
+        }
+      }
+
+      currentTime++;
+
+      if (this._tasksFinished()) {
+        break;
+      }
+
+      result = this._checkTasksProgress(currentTime, result);
+      this._checkTasksAvailability();
+    }
+
+    return {
+      timeSpent: currentTime - 1,
+      result
+    };
+  }
 }

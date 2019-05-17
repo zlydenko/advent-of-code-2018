@@ -1,5 +1,6 @@
 import { parseInput } from '../solution-pt1';
-import { Schedule, generateId } from '../solution-pt2';
+import { Schedule } from '../solution-pt2';
+import inputLoader from '../inputLoader';
 
 describe('day 7, part 2', () => {
   const testData = [
@@ -12,45 +13,25 @@ describe('day 7, part 2', () => {
     'Step C must be finished before step F can begin.'
   ];
 
-  test('create default schedule', () => {
+  test('create schedule from example', () => {
     const parsedInput = parseInput(testData);
-    const schedule = new Schedule(parsedInput, 5);
-    const scheduledWorks = schedule.getWorks();
-    const workA = scheduledWorks.get('A');
-    const expected = ['C'];
+    const schedule = new Schedule(parsedInput, 2);
+    const expectedTime = 15;
+    const expectedResult = 'CABFDE';
 
-    expect(workA).not.toBeNull();
+    const { timeSpent, result } = schedule.calculateCompletingTime();
 
-    if (workA) {
-      expect(workA.dependencies).toEqual(expect.arrayContaining(expected));
-      expect(workA.completingTime).toBe(61);
-    }
+    expect(timeSpent).toBe(expectedTime);
+    expect(result).toBe(expectedResult);
   });
 
-  test('appoint tasks to workers', () => {
-    const parsedInput = parseInput(testData);
-    const schedule = new Schedule(parsedInput, 5);
-    schedule.appointTask('C', 1, 5);
+  test('create schedule on real data', async () => {
+    const data = await inputLoader();
+    const parsedData = parseInput(data);
+    const schedule = new Schedule(parsedData, 5, 60);
 
-    expect(() => schedule.appointTask('A', 6, 5)).toThrow();
-    expect(() => schedule.appointTask('Z', 1, 5)).toThrow();
-    expect(schedule.getAvailableWorkers()).toEqual(expect.arrayContaining([2, 3, 4, 5]));
+    const output = schedule.calculateCompletingTime();
+
+    console.log(output);
   });
-
-  test('generate id', () => {
-    const id = generateId();
-
-    console.log(id);
-  });
-
-  // test('get available works', () => {
-  //   const parsedInput = parseInput(testData);
-  //   const schedule = new Schedule(parsedInput, 5);
-  //   schedule.appointTask('C', 1, 5);
-  //   const availableWorks = schedule.getAvailableWorks();
-
-  //   schedule.info();
-
-  //   // expect(availableWorks).toHaveLength(0);
-  // });
 });
