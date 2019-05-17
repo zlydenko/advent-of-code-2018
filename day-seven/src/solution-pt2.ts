@@ -31,10 +31,10 @@ export class Schedule {
   private initialTime: number = 0;
 
   constructor(data: string[][], workersCount: number, initialTime?: number) {
+    if (initialTime) this.initialTime = initialTime;
     this._storeTasks(data);
     this._storeWorkers(workersCount);
     this._checkTasksAvailability();
-    if (initialTime) this.initialTime = initialTime;
   }
 
   private _generateId(): string {

@@ -29,9 +29,12 @@ describe('day 7, part 2', () => {
     const data = await inputLoader();
     const parsedData = parseInput(data);
     const schedule = new Schedule(parsedData, 5, 60);
+    const expected = 906;
 
     const output = schedule.calculateCompletingTime();
 
     console.log(output);
+
+    expect(output.timeSpent).toBe(expected);
   });
 });
