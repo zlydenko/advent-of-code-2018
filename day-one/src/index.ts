@@ -1,24 +1,18 @@
-import * as fs from "fs";
-import * as path from "path";
-
-const inputFilePath: string = path.resolve(__dirname, "../", "input.txt");
+import inputLoader from '~root/inputLoader';
 
 const STARTING_FREQUENCY: number = 0;
 
-const extractInputData = (inputPath: string): Promise<string[]> =>
-  new Promise((resolve, reject) => {
-    fs.readFile(inputPath, (err, data) => {
-      if (err) reject(err);
-
-      resolve(data.toString().split("\r\n"));
-    });
+const dataLoader = async () => {
+  return await inputLoader('day-one', (data: any) => {
+    return data.toString().split('\r\n');
   });
+};
 
 const frequencyReducer = (acc: number, value: string) => (acc += Number(value));
 
-const chronalCalibration = async (pathToInput: string, startingPoint: number): Promise<number> => {
+const chronalCalibration = async (startingPoint: number): Promise<number> => {
   try {
-    const frequencyData = await extractInputData(pathToInput);
+    const frequencyData = await dataLoader();
     const resultingFrequency = frequencyData.reduce(frequencyReducer, startingPoint);
 
     return resultingFrequency;
@@ -28,10 +22,10 @@ const chronalCalibration = async (pathToInput: string, startingPoint: number): P
 };
 
 const partOne = () => {
-  chronalCalibration(inputFilePath, STARTING_FREQUENCY)
+  chronalCalibration(STARTING_FREQUENCY)
     .then(result => console.log(`Resulting frequency: ${result}`))
     .catch(error => {
-      console.log("Some troubles occured");
+      console.log('Some troubles occured');
       console.error(error);
     });
 };
@@ -68,13 +62,13 @@ export const findDuplicateFrequency = (inputData: string[], startingPoint: numbe
 };
 
 const partTwo = () => {
-  extractInputData(inputFilePath)
+  dataLoader()
     .then(res => {
       const result = findDuplicateFrequency(res, STARTING_FREQUENCY);
       console.log(`Resulting frequency: ${result}`);
     })
     .catch(error => {
-      console.log("Some troubles occured");
+      console.log('Some troubles occured');
       console.error(error);
     });
 };

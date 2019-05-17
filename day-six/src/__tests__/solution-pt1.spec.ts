@@ -1,4 +1,4 @@
-import inputLoader from '../inputLoader';
+import inputLoader from '~root/inputLoader';
 import { getBorderPoint, createMatrix, convertPoints, calculateManhattanDistance, getClosestPointIdx, calculatePointsAreas, getLargestFiniteAreaSize } from '../solution-pt1';
 
 describe('day six', () => {
@@ -6,7 +6,7 @@ describe('day six', () => {
   const testData = [['1', '1'], ['1', '6'], ['8', '3'], ['3', '4'], ['5', '5'], ['8', '9']];
 
   beforeAll(async () => {
-    data = await inputLoader();
+    data = await inputLoader('day-six', (data: string) => data.split('\n').map(val => val.split(', ')));
   });
 
   test('it must load data', () => {

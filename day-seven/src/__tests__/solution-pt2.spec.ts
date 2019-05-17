@@ -1,6 +1,6 @@
 import { parseInput } from '../solution-pt1';
 import { Schedule } from '../solution-pt2';
-import inputLoader from '../inputLoader';
+import inputLoader from '~root/inputLoader';
 
 describe('day 7, part 2', () => {
   const testData = [
@@ -32,7 +32,7 @@ describe('day 7, part 2', () => {
   });
 
   test('create schedule on real data', async () => {
-    const data = await inputLoader();
+    const data = await inputLoader('day-seven', (data: string) => data.split('\n'));
     const parsedData = parseInput(data);
 
     console.time('Creating schedule instance');

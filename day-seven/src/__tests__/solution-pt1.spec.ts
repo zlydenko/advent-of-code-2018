@@ -1,4 +1,4 @@
-import inputLoader from '../inputLoader';
+import inputLoader from '~root/inputLoader';
 import { parseInput, Instructions } from '../solution-pt1';
 
 describe('day 7: part one', () => {
@@ -15,7 +15,7 @@ describe('day 7: part one', () => {
 
   test('load input data', async () => {
     try {
-      data = await inputLoader();
+      data = await inputLoader('day-seven', (data: string) => data.split('\n'));
 
       expect(data).toBeInstanceOf(Array);
       expect(data).toHaveLength(101);
