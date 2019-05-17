@@ -1,7 +1,7 @@
-import inputData from "./inputLoader";
+import inputLoader from '~root/inputLoader';
 
 export const scanBoxId = (id: string): [number, number] => {
-  const splittedId = id.split("");
+  const splittedId = id.split('');
   let result: [number, number] = [0, 0];
 
   splittedId.forEach((letter: string) => {
@@ -35,7 +35,7 @@ export const boxIdChecksum = (input: string[]): number => {
   return checksum;
 };
 
-inputData().then(input => {
+inputLoader('day-two', (data: string) => data.split('\r\n')).then(input => {
   const solutionAnswer = boxIdChecksum(input);
   console.log(`Answer is: ${solutionAnswer}`);
 });
