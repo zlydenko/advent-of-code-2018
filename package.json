@@ -6,7 +6,7 @@
   "scripts": {
     "ts:w": "tsc -w",
     "start": "node -r esm day-seven/src/solution-pt2",
-    "test": "jest day-seven/src/__tests__",
+    "test": "jest day-eight/src/__tests__/solution-pt1.spec.ts",
     "postinstall": "link-module-alias",
     "preinstall": "command -v link-module-alias && link-module-alias clean || true"
   },
