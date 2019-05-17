@@ -1,4 +1,4 @@
-import inputLoader from '../inputLoader';
+import inputLoader from '~root/inputLoader';
 import { SafeRegion } from '../types';
 import { convertPoints, getBorderPoint, createMatrix } from '../solution-pt1';
 import { calculateSumManhattanDistances, isPointInRegion, calculateSafeRegion } from '../solution-pt2';
@@ -41,7 +41,7 @@ describe('day 6: part two', () => {
 
   test('solution for part two', async () => {
     try {
-      const data = await inputLoader();
+      const data = await inputLoader('day-six', (data: string) => data.split('\n').map(val => val.split(', ')));
       const parsedData = convertPoints(data);
       const borderPoint = getBorderPoint(data);
       const matrix = createMatrix(borderPoint);
