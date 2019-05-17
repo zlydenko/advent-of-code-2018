@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "ts:w": "tsc -w",
-    "start": "node -r esm day-six/src/solution-pt1",
-    "test": "jest day-six/src/__tests__/solution-pt2.spec.ts"
+    "start": "node -r esm day-seven/src/solution-pt2",
+    "test": "jest day-seven/src/__tests__/solution-pt2.spec.ts"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +19,9 @@
     "typescript": "^3.4.1"
   },
   "dependencies": {
-    "esm": "^3.2.22"
+    "@types/nanoid": "^2.0.0",
+    "esm": "^3.2.22",
+    "nanoid": "^2.0.2"
   },
   "jest": {
     "preset": "ts-jest"
