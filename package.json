@@ -30,6 +30,6 @@
     "preset": "ts-jest"
   },
   "_moduleAliases": {
-    "~root"      : "."
+    "~root": "."
   }
 }

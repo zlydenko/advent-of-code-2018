@@ -3,270 +3,148 @@ import inputLoader from '~root/inputLoader';
 
 type id = string;
 
-// export class Tree {
-//   private root: TreeNode | null = null;
-
-//   setRoot(node: TreeNode) {
-//     this.root = node;
-//   }
-
-//   isRootCreated(): boolean {
-//     return this.root !== null;
-//   }
-// }
-
-// export class TreeNode {}
-
-// const creatingTreeReducer = (tree: Tree, value: number): Tree => {
-//   return tree;
-// };
-
-// const creatingTree = (data: number[]): Tree => {
-//   return data.reduce(creatingTreeReducer, new Tree());
-// };
-
-const x = [
-  {
-    id: 0,
-    header: [1, 3],
-    children: [1]
-  },
-  {
-    id: 1,
-    header: [0, 1],
-    children: null
-  },
-  {
-    id: 2,
-    header: [0, 1],
-    children: null
-  }
-];
-
 export class Tree {
+  private rootNode: Node;
   private nodes: Node[] = [];
-  private edges: Edge[] = [];
 
-  nodeById(id: id): Node | null {
-    return this.nodes.find(node => node.id === id) || null;
+  constructor(data: number[]) {
+    //? create root node here
+    this.rootNode = this._createRootNode(data);
+    this._parseInput(data.slice(2, -this.rootNode.howManyMetadata()));
   }
 
-  edgeById(id: id): Edge | null {
-    return this.edges.find(edge => edge.id === id) || null;
+  private _createRootNode(data: number[]): Node {
+    const rootNode = new Node([data[0], data[1]]);
+    const meta = data.slice(-data[1]);
+    rootNode.setMeta(meta);
+
+    return rootNode;
   }
 
-  addNode(n: Node): Node {
-    this.nodes.push(n);
+  private _parseInput(data: number[]): void {
+    let idx = 0;
+    while (idx < data.length) {
+      let slice = 0;
 
-    return n;
-  }
+      const newNode = new Node([data[idx], data[idx + 1]]);
+      console.log('created node', newNode);
+      slice += 2;
 
-  addEdge(e: Edge): Edge {
-    this.edges.push(e);
-
-    return e;
-  }
-
-  isEmpty(): boolean {
-    return this.nodes.length === 0;
-  }
-
-  getChildrenCount(id: id): number {
-    return this.edges.filter(edge => edge.parent === id).length;
-  }
-
-  getLastNodeByChildren(): Node | null {
-    let nodeId = null;
-
-    for (let i = this.nodes.length - 1; i >= 0; i--) {
-      // console.log('checking node', this.nodes[i]);
-      const { id, header } = this.nodes[i];
-      const [expectedChildrenCount, _] = header;
-      const childrenCount = this.getChildrenCount(id);
-      // console.log('expected children', expectedChildrenCount);
-      // console.log('fact', childrenCount);
-
-      if (childrenCount < expectedChildrenCount) {
-        // console.log('children not fulfilled, breaking');
-        nodeId = id;
-        break;
+      if (data[idx] === 0) {
+        console.log('no children for current node -> extract meta');
+        const meta = data.slice(idx + 2, idx + 2 + data[idx + 1]);
+        console.log('get meta', meta);
+        newNode.setMeta(meta);
+        slice += idx + 2 + data[idx + 1];
       }
-    }
 
-    // console.log('returning');
-    return nodeId ? this.nodeById(nodeId) : null;
-  }
+      console.log('looking for related node');
+      const relatedNode = this._getRelatedNode();
 
-  getLastNodeByMeta(): Node | null {
-    let nodeId = null;
+      console.log('found', relatedNode);
 
-    for (let i = this.nodes.length - 1; i >= 0; i--) {
-      // console.log('checking meta for', this.nodes[i]);
-      const { id, header, meta } = this.nodes[i];
-      const [_, metaLength] = header;
+      const wouldBeFulfilled = relatedNode.isFulfilled(relatedNode.getChildren().length + 1);
 
-      // console.log('expected meta length', metaLength);
-      // console.log('current meta', meta);
+      relatedNode.addChild(newNode.id);
 
-      if (meta.length < metaLength) {
-        nodeId = id;
-        break;
+      if (wouldBeFulfilled) {
+        console.log('setting meta for related node');
+        const relatedNodeMetaLength = relatedNode.howManyMetadata();
+        const meta = data.slice(slice, slice + relatedNodeMetaLength);
+
+        console.log('meta for related', meta);
+
+        slice += relatedNodeMetaLength;
+
+        relatedNode.setMeta(meta);
       }
-    }
 
-    return nodeId ? this.nodeById(nodeId) : null;
+      this.nodes.push(newNode);
+
+      idx += slice;
+    }
   }
 
-  nodesChildrenFulfilled(id: id): boolean {
-    const node = this.nodeById(id);
-    if (!node) return false;
-    const childrenCount = node.header[0];
-    const isFulfilled = this.getChildrenCount(id) === childrenCount;
-    // console.log('is fulfilled', isFulfilled);
-    return isFulfilled;
+  private _getRelatedNode(): Node {
+    const unfulfilledNodes = this.nodes.filter(node => !node.isFulfilled());
+    const relatedNode = unfulfilledNodes[unfulfilledNodes.length - 1] || this.rootNode;
+
+    return relatedNode;
   }
 
   getMetaSum(): number {
-    return this.nodes.reduce((sum, node) => (sum += node.meta.reduce((nodeSum, n) => (nodeSum += n), 0)), 0);
+    const rootMeta = this.rootNode.getMeta();
+    const childrenMeta = this.nodes.reduce((meta: number[], node: Node) => {
+      const childMeta = node.getMeta();
+
+      return [...meta, ...childMeta];
+    }, []);
+    const sum = [...rootMeta, ...childrenMeta].reduce((sum, n) => (sum += n), 0);
+
+    return sum;
   }
 
-  isNodesFulfilled(): boolean {
-    const nodesIds = this.nodes.map(node => node.id);
+  showNodes(): void {
+    console.log('---------------------');
+    console.log('nodes log');
+    console.log('---------------------');
 
-    return nodesIds.filter(nodeId => !this.nodesChildrenFulfilled(nodeId)).length === 0;
+    console.log(this.rootNode);
+
+    this.nodes.forEach(node => {
+      console.log(node);
+    });
   }
 }
 
 export class Node {
   id: id;
-  header: [number, number];
-  meta: number[] = [];
+  private header: [number, number];
+  private meta: number[] = [];
+  private children: id[] = [];
 
-  constructor(x: [number, number]) {
-    this.header = x;
+  constructor(h: [number, number]) {
+    this.header = h;
     this.id = nanoid(10);
   }
 
-  setMeta(m: number[]): Node {
-    this.meta = m;
+  addChild(id: id): Node {
+    this.children.push(id);
 
     return this;
   }
 
-  haveChildren(): boolean {
-    return this.header[0] > 0;
+  getChildren(): id[] {
+    return this.children;
+  }
+
+  setMeta(meta: number[]): Node {
+    this.meta = meta;
+
+    return this;
+  }
+
+  getMeta(): number[] {
+    return this.meta;
+  }
+
+  howManyChildren(): number {
+    return this.header[0];
+  }
+
+  howManyMetadata(): number {
+    return this.header[1];
+  }
+
+  isFulfilled(possibleCount?: number): boolean {
+    return possibleCount ? possibleCount === this.header[0] : this.children.length === this.header[0];
+  }
+
+  isMetaSet(): boolean {
+    return this.meta.length === this.header[1];
+  }
+
+  isDone(): boolean {
+    return this.isFulfilled() && this.isMetaSet();
   }
 }
-
-export class Edge {
-  id: id;
-  child: id;
-  parent: id;
-
-  constructor(child: id, parent: id) {
-    this.child = child;
-    this.parent = parent;
-    this.id = nanoid(10);
-  }
-}
-
-const testData2 = [2, 3, 0, 1, 55, 0, 1, 88, 11, 15, 16];
-
-export const buildTree = (data: number[]): Tree => {
-  const tree = new Tree();
-  let idx = 0;
-
-  //? create root node
-
-  const header: [number, number] = [data[idx], data[idx + 1]];
-  const rootNode = new Node(header);
-  tree.addNode(rootNode);
-  idx = 2;
-
-  while (idx < data.length) {
-    // console.log(idx);
-    let sliced = 2;
-    const header: [number, number] = [data[idx], data[idx + 1]];
-    // console.log('header', header);
-
-    // console.log('tree is not empty');
-
-    //? tree is not empty
-    //todo get related node (with no fulfilled children)
-    const lastNode = tree.getLastNodeByChildren();
-
-    // console.log('last node', lastNode);
-
-    if (!lastNode) {
-      throw new Error('oops');
-    }
-
-    //todo create node with header
-    const newNode = new Node(header);
-    console.log('created', newNode);
-    //todo create edge between this nodes
-    const edge = new Edge(newNode.id, lastNode.id);
-
-    //todo check if new node havent children -> set meta
-    if (!newNode.haveChildren()) {
-      // console.log('new node havent children, adding meta');
-      sliced += header[1];
-      const meta = data.slice(idx + 2, idx + 2 + header[1]);
-      // console.log(`slice from ${idx + 2} to ${idx + 2 + header[1]}`);
-      // console.log('meta', meta);
-      newNode.setMeta(meta);
-    }
-
-    tree.addNode(newNode);
-    tree.addEdge(edge);
-    // console.log('added node and edge to tree');
-
-    //todo check if related node now fulfilled
-    const lastNodeFulfilled = tree.nodesChildrenFulfilled(lastNode.id);
-    // console.log('is last node fulfilled with children', lastNodeFulfilled);
-    // console.log('current node children count', header[0]);
-    //todo if it is -> set him meta
-    if (lastNodeFulfilled && header[0] === 0) {
-      const nodeWithoutMeta = tree.getLastNodeByMeta();
-      // console.log('last node fulfilled, get one who needs meta', nodeWithoutMeta);
-
-      if (nodeWithoutMeta) {
-        const metaLength = nodeWithoutMeta.header[1];
-        const meta = data.slice(idx + sliced, idx + sliced + metaLength);
-        // console.log(`slicing from ${idx + sliced} to ${idx + sliced + metaLength}`);
-        nodeWithoutMeta.setMeta(meta);
-        // console.log('setting meta', meta);
-        sliced += metaLength;
-      }
-    }
-
-    idx += sliced;
-    // console.log('tree', tree);
-    //? check if there nodes not fulfilled
-    const isNodesFulfilled = tree.isNodesFulfilled();
-    //? if there is no any -> left is someone's meta
-    if (isNodesFulfilled) {
-      const nodeWithoutMeta = tree.getLastNodeByMeta();
-      // console.log('last node fulfilled, get one who needs meta', nodeWithoutMeta);
-
-      if (nodeWithoutMeta) {
-        const metaLength = nodeWithoutMeta.header[1];
-        const meta = data.slice(idx, idx + metaLength);
-        // console.log(`slicing from ${idx + sliced} to ${idx + sliced + metaLength}`);
-        nodeWithoutMeta.setMeta(meta);
-        // console.log('setting meta', meta);
-      }
-
-      break;
-    }
-  }
-
-  return tree;
-};
-
-inputLoader('day-eight', (data: string) => data.split(' ').map(v => +v)).then(data => {
-  const tree = buildTree(data);
-  console.log(tree);
-  const x = tree.getMetaSum();
-  console.log(x);
-});
