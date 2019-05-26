@@ -48,4 +48,16 @@ describe("day 8, part one", () => {
     expect(treeNodes[1].size).toBe(2);
     expect(treeNodes[2].size).toBe(5);
   });
+
+  test("calculate sum of metadata", () => {
+    const metaSums: number[] = testData
+      .reduce((treeAcc: Tree[], input: number[]) => {
+        return [...treeAcc, new Tree(input)];
+      }, [])
+      .map(tree => tree.calculateMetaSum());
+
+    expect(metaSums[0]).toBe(138);
+    expect(metaSums[1]).toBe(97);
+    expect(metaSums[2]).toBe(56);
+  });
 });

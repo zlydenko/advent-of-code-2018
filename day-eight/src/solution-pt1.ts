@@ -66,17 +66,17 @@ export class Tree {
     let idx: number = 0;
 
     while (idx < data.length) {
-      console.log("current idx", idx);
+      // console.log("current idx", idx);
       let jumpIdx = 0;
       const newNodeHeader: [number, number] = [data[idx], data[idx + 1]];
       const newNode = new Node(newNodeHeader);
-      console.log("created node", newNode);
+      // console.log("created node", newNode);
       jumpIdx += 2;
 
       if (newNodeHeader[0] === 0) {
         //? node havent children -> get meta and proceed
         const meta = data.slice(idx + jumpIdx, idx + jumpIdx + newNodeHeader[1]);
-        console.log("node havent children -> setting meta", meta);
+        // console.log("node havent children -> setting meta", meta);
         newNode.setMeta(meta);
         jumpIdx += newNodeHeader[1];
 
@@ -86,22 +86,22 @@ export class Tree {
         let currentNode = newNode;
 
         while (true) {
-          console.log("current node", currentNode);
+          // console.log("current node", currentNode);
           //? get last element in stack
           const lastNode = stack[stack.length - 1];
 
           if (!lastNode) break;
 
-          console.log("last node in stack", lastNode);
+          // console.log("last node in stack", lastNode);
           //? set child
           lastNode.addChild(currentNode.id);
           //? check if fulfilled by children
           if (lastNode.getChildren().length === lastNode.getChildrenCount()) {
-            console.log("last node fulfilled with children, set meta");
+            // console.log("last node fulfilled with children, set meta");
             //? yes -> pop out and set meta
             const metaLength = lastNode.getMetadataLength();
             const meta = data.slice(idx + jumpIdx, idx + jumpIdx + metaLength);
-            console.log(meta);
+            // console.log(meta);
             jumpIdx += metaLength;
 
             lastNode.setMeta(meta);
@@ -109,14 +109,14 @@ export class Tree {
             currentNode = lastNode;
           } else {
             //? no -> proceed to next iteration
-            console.log("continue to next iteration");
+            // console.log("continue to next iteration");
             break;
           }
         }
       } else {
         //? node have children -> add node to stack
         stack.push(newNode);
-        console.log("have children adding to stack");
+        // console.log("have children adding to stack");
       }
 
       this._setNode(newNode);
@@ -126,5 +126,11 @@ export class Tree {
 
   nodeList(): Map<id, Node> {
     return this.nodes;
+  }
+
+  calculateMetaSum(): number {
+    return Array.from(this.nodes).reduce((metaSum: number, [_id, node]) => {
+      return (metaSum += node.getMeta().reduce((sum: number, n: number) => (sum += n), 0));
+    }, 0);
   }
 }
