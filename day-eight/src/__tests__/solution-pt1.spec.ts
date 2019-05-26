@@ -1,4 +1,4 @@
-import { Node } from "../solution-pt1";
+import { Node, Tree } from "../solution-pt1";
 import inputLoader from "~root/inputLoader";
 
 describe("day 8, part one", () => {
@@ -35,5 +35,17 @@ describe("day 8, part one", () => {
     node.addChild(childNode.id);
     expect(node.isFulfilled).toBe(true);
     expect(emptyNode.isFulfilled).toBe(true);
+  });
+
+  test("build the tree", () => {
+    const treeNodes: Array<Map<string, Node>> = testData
+      .reduce((treeAcc: Tree[], input: number[]) => {
+        return [...treeAcc, new Tree(input)];
+      }, [])
+      .map(tree => tree.nodeList());
+
+    expect(treeNodes[0].size).toBe(4);
+    expect(treeNodes[1].size).toBe(2);
+    expect(treeNodes[2].size).toBe(5);
   });
 });

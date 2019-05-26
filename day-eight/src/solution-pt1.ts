@@ -66,43 +66,65 @@ export class Tree {
     let idx: number = 0;
 
     while (idx < data.length) {
+      console.log("current idx", idx);
       let jumpIdx = 0;
       const newNodeHeader: [number, number] = [data[idx], data[idx + 1]];
       const newNode = new Node(newNodeHeader);
+      console.log("created node", newNode);
       jumpIdx += 2;
 
       if (newNodeHeader[0] === 0) {
         //? node havent children -> get meta and proceed
         const meta = data.slice(idx + jumpIdx, idx + jumpIdx + newNodeHeader[1]);
+        console.log("node havent children -> setting meta", meta);
         newNode.setMeta(meta);
         jumpIdx += newNodeHeader[1];
 
         //? now this node is finished
-        //? we need to pop nodes in stack one by one until we find parent
+        //? we need to pop nodes in stack one by one until we find unfinished node
+
+        let currentNode = newNode;
 
         while (true) {
+          console.log("current node", currentNode);
           //? get last element in stack
           const lastNode = stack[stack.length - 1];
-          lastNode.addChild(newNode.id);
 
+          if (!lastNode) break;
+
+          console.log("last node in stack", lastNode);
+          //? set child
+          lastNode.addChild(currentNode.id);
+          //? check if fulfilled by children
           if (lastNode.getChildren().length === lastNode.getChildrenCount()) {
-            //? all children set -> set meta and pop mthfcker out
+            console.log("last node fulfilled with children, set meta");
+            //? yes -> pop out and set meta
             const metaLength = lastNode.getMetadataLength();
             const meta = data.slice(idx + jumpIdx, idx + jumpIdx + metaLength);
+            console.log(meta);
             jumpIdx += metaLength;
 
             lastNode.setMeta(meta);
             stack.pop();
+            currentNode = lastNode;
           } else {
+            //? no -> proceed to next iteration
+            console.log("continue to next iteration");
+            break;
           }
         }
       } else {
         //? node have children -> add node to stack
         stack.push(newNode);
+        console.log("have children adding to stack");
       }
 
       this._setNode(newNode);
       idx += jumpIdx;
     }
+  }
+
+  nodeList(): Map<id, Node> {
+    return this.nodes;
   }
 }
