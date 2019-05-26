@@ -60,4 +60,11 @@ describe("day 8, part one", () => {
     expect(metaSums[1]).toBe(97);
     expect(metaSums[2]).toBe(56);
   });
+
+  test("solution", async () => {
+    const data = await inputLoader("day-eight", (data: string) => data.split(" ").map(v => +v));
+    const tree = new Tree(data);
+
+    console.log(tree.calculateMetaSum());
+  });
 });
