@@ -24,6 +24,7 @@ describe("day 8, part one", () => {
     const childMeta = [1, 2, 3];
     const node = new Node(header);
     const childNode = new Node(childHeader);
+    const emptyNode = new Node([0, 0]);
 
     expect(node.isFulfilled).toBe(false);
     expect(childNode.isFulfilled).toBe(false);
@@ -31,7 +32,8 @@ describe("day 8, part one", () => {
     expect(childNode.isFulfilled).toBe(true);
     node.setMeta(nodeMeta);
     expect(node.isFulfilled).toBe(false);
-    node.addChild(childNode);
+    node.addChild(childNode.id);
     expect(node.isFulfilled).toBe(true);
+    expect(emptyNode.isFulfilled).toBe(true);
   });
 });
