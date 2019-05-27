@@ -47,8 +47,8 @@ export class Node {
   }
 }
 
-type NodeQueue = Array<Node>;
-type id = string;
+export type NodeQueue = Array<Node>;
+export type id = string;
 
 export class Tree {
   private nodes: Map<id, Node> = new Map();
@@ -126,5 +126,13 @@ export class Tree {
     return Array.from(this.nodes).reduce((metaSum: number, [_id, node]) => {
       return (metaSum += node.getMeta().reduce((sum: number, n: number) => (sum += n), 0));
     }, 0);
+  }
+
+  getNode(id: id): Node {
+    const node = this.nodes.get(id);
+
+    if (!node) throw new Error("node is not found");
+
+    return node;
   }
 }
