@@ -52,6 +52,7 @@ type id = string;
 
 export class Tree {
   private nodes: Map<id, Node> = new Map();
+  rootNode: id | undefined;
 
   constructor(input: number[]) {
     this._buildTree(input);
@@ -70,6 +71,8 @@ export class Tree {
       const newNodeHeader: [number, number] = [data[idx], data[idx + 1]];
       const newNode = new Node(newNodeHeader);
       jumpIdx += 2;
+
+      if (this.nodes.size === 0) this.rootNode = newNode.id;
 
       if (newNodeHeader[0] === 0) {
         //? node havent children -> get meta and proceed
