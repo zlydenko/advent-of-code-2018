@@ -37,76 +37,57 @@ export class MarbleCircle {
     return this.output;
   }
 
-  // private _initialTurn(): void {
-  //   this.output = [0];
-  //   this.currentPlayer = 0;
-  // }
+  makeTurns(iterations: number): void {
+    let i = 1;
 
-  *turnGenerator(iterations: number): IterableIterator<any> {
-    let i = 0;
-
-    while (i < iterations) {
+    while (i <= iterations) {
+      console.log("current iteration", i);
+      //? iteration #24
       const currentPlayer = this.currentPlayer;
       const currentMarble = this.currentMarble;
+      //? current marble -> 19
       const currentMarbleIdx = this.output.indexOf(currentMarble);
+      //? index of 19
 
-      const beforeIdx = (currentMarbleIdx + 1) % this.output.length;
-      const afterIdx = (currentMarbleIdx + 2) % this.output.length;
-      this.output = insertBetween(this.output, this.marbleId, beforeIdx, afterIdx);
+      console.log("current marble", currentMarble);
 
-      yield {
-        output: this.output,
-        playedBy: currentPlayer
-      };
+      if (this.marbleId % 23 === 0) {
+        const currentPlayerScore = this.playersScores.get(currentPlayer) || 0;
+        const deletingIdx = this.output.indexOf(currentMarble) - 7;
+        const deletedMarble = this.output[deletingIdx];
 
-      this.currentMarble++;
+        this.playersScores.set(currentPlayer, currentPlayerScore + this.marbleId + deletedMarble);
+
+        const before = this.output.slice(0, deletingIdx);
+        const after = this.output.slice(deletingIdx + 1);
+        this.output = [...before, ...after];
+
+        this.currentMarble = this.output[deletingIdx];
+      } else {
+        //? find next to 19 +1 and 19 +2
+        const beforeIdx = (currentMarbleIdx + 1) % this.output.length;
+        const afterIdx = (currentMarbleIdx + 2) % this.output.length;
+        console.log("before", beforeIdx);
+        console.log("after", afterIdx);
+        this.output = insertBetween(this.output, this.marbleId, beforeIdx, afterIdx);
+        this.currentMarble++;
+        // this.currentMarble = this.marbleId + 1; //doesnt work
+
+        //? outputs 24 between right indexes
+        //! current marble + 1, so current marble became 20, but it is 24
+      }
+
       this.marbleId++;
-      this.currentPlayer++;
+      this.currentPlayer = this.currentPlayer < this.playersCounter ? this.currentPlayer + 1 : 1;
 
       i++;
+      console.log(this.output);
     }
   }
 
-  // newTurn(): void {
-  //   //todo: need to refactor & simplify
-  //   //* we need to store current marble & incr id for marble (23 ? +2 : +1)
-  //   //* current marble needed only for positioning
-  //   //* marble id need to keep scores
-
-  //   if (this.currentPlayer === null) {
-  //     this._initialTurn();
-  //   } else {
-  //     this.currentPlayer = this.currentPlayer === this.playersCounter ? 1 : this.currentPlayer + 1;
-
-  //     const currentMarble = this.currentMarble;
-  //     const currentMarbleIdx = this.output.indexOf(currentMarble);
-  //     const newMarble = this.marbleId;
-
-  //     if (newMarble % 23 === 0) {
-  //       //? new score to the player
-  //       const currentScore = this.playersScores.get(this.currentPlayer) || 0;
-
-  //       //? get marble 7 marbles counter-clockwise
-  //       const deletedMarbleIdx = this.output.indexOf(this.currentMarble) - 7;
-  //       //? add to score
-  //       const deletedMarble = this.output[deletedMarbleIdx];
-  //       this.playersScores.set(this.currentPlayer, currentScore + newMarble + deletedMarble);
-  //       //? remove from array
-  //       const before = this.output.slice(0, deletedMarbleIdx);
-  //       const after = this.output.slice(deletedMarbleIdx + 1);
-  //       this.output = [...before, ...after];
-  //       this.currentMarble = this.output[deletedMarbleIdx];
-  //       this.marbleId++;
-  //     } else {
-  //       //? get c.m.+1
-  //       const beforeIdx = (currentMarbleIdx + 1) % this.output.length;
-  //       //? get c.m.+2
-  //       const afterIdx = (currentMarbleIdx + 2) % this.output.length;
-  //       //? place new marble between
-  //       this.output = insertBetween(this.output, newMarble, beforeIdx, afterIdx);
-  //       this.currentMarble = newMarble;
-  //     }
-  //     this.marbleId++;
-  //   }
-  // }
+  getWinnerScore(): number {
+    return Array.from(this.playersScores).reduce((winnerScore, [_, score]) => {
+      return winnerScore > score ? winnerScore : score;
+    }, 0);
+  }
 }
