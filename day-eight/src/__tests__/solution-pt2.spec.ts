@@ -31,4 +31,14 @@ describe('day 8, part 2', () => {
 
     expect(rootNodeValue).toBe(66);
   });
+
+  test('solution', async () => {
+    const data = await inputLoader('day-eight', (data: string) => {
+      return data.split(' ').map(v => +v);
+    });
+    const tree = new Tree(data);
+    const value = getRootNodeValue(tree);
+
+    expect(value).toBeDefined();
+  });
 });
