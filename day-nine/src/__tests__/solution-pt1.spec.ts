@@ -43,7 +43,7 @@ describe("day 9 part 1", () => {
 
   test("turns", () => {
     const circle = new MarbleCircle(9);
-    circle.makeTurns(25);
+    circle.makeTurns(25); //? 25 -> last marble worth points
     const highScore = circle.getWinnerScore();
 
     expect(highScore).toBe(32);
