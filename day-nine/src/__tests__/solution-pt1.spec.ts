@@ -1,5 +1,4 @@
 import { MarbleCircle, insertBetween } from '../solution-pt1';
-// import inputLoader from '~root/inputLoader';
 
 describe('day 9 part 1', () => {
   test('set players', () => {
@@ -83,12 +82,6 @@ describe('day 9 part 1', () => {
 
   test('real data', async () => {
     const [playersCount, lastMarble]: number[] = [405, 71700];
-    // await inputLoader('day-nine', (data: string) => {
-    //   return data
-    //     .split(' ')
-    //     .filter(value => !isNaN(+value))
-    //     .map(v => +v);
-    // });
     const game = new MarbleCircle(playersCount);
     game.makeTurns(lastMarble);
 
