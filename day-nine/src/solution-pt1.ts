@@ -4,10 +4,6 @@ export const insertBetween = (arr: number[], inserting: number, beforeIdx: numbe
   return [...before, inserting, ...after];
 };
 
-interface TurnI {
-  playedBy: number;
-}
-
 export class MarbleCircle {
   private output: number[] = [0];
   private playersScores: Map<number, number> = new Map();
@@ -40,8 +36,9 @@ export class MarbleCircle {
   makeTurns(iterations: number): void {
     let i = 1;
 
+    let tempMarble = null;
+
     while (i <= iterations) {
-      console.log("current iteration", i);
       //? iteration #24
       const currentPlayer = this.currentPlayer;
       const currentMarble = this.currentMarble;
@@ -49,11 +46,11 @@ export class MarbleCircle {
       const currentMarbleIdx = this.output.indexOf(currentMarble);
       //? index of 19
 
-      console.log("current marble", currentMarble);
-
       if (this.marbleId % 23 === 0) {
         const currentPlayerScore = this.playersScores.get(currentPlayer) || 0;
-        const deletingIdx = this.output.indexOf(currentMarble) - 7;
+        //? need to check if deleting idx go beyond 0 (thats mean it must go in other side)
+
+        const deletingIdx = currentMarbleIdx - 7 < 0 ? this.output.length - -(currentMarbleIdx - 7) : currentMarbleIdx - 7;
         const deletedMarble = this.output[deletingIdx];
 
         this.playersScores.set(currentPlayer, currentPlayerScore + this.marbleId + deletedMarble);
@@ -63,15 +60,15 @@ export class MarbleCircle {
         this.output = [...before, ...after];
 
         this.currentMarble = this.output[deletingIdx];
+        tempMarble = this.marbleId + 1;
       } else {
         //? find next to 19 +1 and 19 +2
         const beforeIdx = (currentMarbleIdx + 1) % this.output.length;
         const afterIdx = (currentMarbleIdx + 2) % this.output.length;
-        console.log("before", beforeIdx);
-        console.log("after", afterIdx);
         this.output = insertBetween(this.output, this.marbleId, beforeIdx, afterIdx);
-        this.currentMarble++;
-        // this.currentMarble = this.marbleId + 1; //doesnt work
+        this.currentMarble = tempMarble === null ? this.currentMarble + 1 : tempMarble;
+
+        if (tempMarble !== null) tempMarble = null;
 
         //? outputs 24 between right indexes
         //! current marble + 1, so current marble became 20, but it is 24
@@ -81,7 +78,6 @@ export class MarbleCircle {
       this.currentPlayer = this.currentPlayer < this.playersCounter ? this.currentPlayer + 1 : 1;
 
       i++;
-      console.log(this.output);
     }
   }
 
