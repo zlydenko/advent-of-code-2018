@@ -149,4 +149,8 @@ describe('linked list', () => {
 
     expect(listStr).toBe('0,1,2');
   });
+
+  test('delete node', () => {
+    const list = new LinkedList();
+  });
 });

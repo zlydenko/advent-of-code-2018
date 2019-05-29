@@ -1,3 +1,7 @@
+/*
+  related: https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/doubly-linked-list/DoublyLinkedList.js
+*/
+
 export class ListNode<T> {
   prev: ListNode<T> | null = null;
   next: ListNode<T> | null = null;
@@ -182,22 +186,34 @@ export default class LinkedList<T> {
   }
 
   deleteNode(node?: ListNode<T>, value?: T): LinkedList<T> {
-    const deleteNode = value ? this.findNode(value) : node;
+    if (!this.head || !this.tail) {
+      throw new Error('empty list');
+    }
 
-    if (deleteNode) {
-      if (this.head === deleteNode) {
-        if (this.head.next) {
-          const nextNode = this.head.next;
-          nextNode.deletePrev();
-          this.head = nextNode;
-        }
-      } else if (this.tail === deleteNode) {
-        if (this.tail.prev) {
-          const previousNode = this.tail.prev;
-          previousNode.deleteNext();
-          this.tail = previousNode;
-        }
+    if ((node && node === this.head) || (value && value === this.head.value)) {
+      const nextNode = this.head.next;
+
+      if (!nextNode) {
+        this.head = null;
+        this.tail = null;
       } else {
+        nextNode.deletePrev();
+        this.head = nextNode;
+      }
+    } else if ((node && node === this.tail) || (value && value === this.tail.value)) {
+      const prevNode = this.tail.prev;
+
+      if (!prevNode) {
+        this.head = null;
+        this.tail = null;
+      } else {
+        prevNode.deleteNext();
+        this.tail = prevNode;
+      }
+    } else {
+      const deleteNode = value ? this.findNode(value) : node;
+
+      if (deleteNode) {
         const prevNode = deleteNode.prev;
         const nextNode = deleteNode.next;
 
