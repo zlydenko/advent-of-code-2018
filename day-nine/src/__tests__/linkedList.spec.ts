@@ -33,8 +33,8 @@ describe('linked list', () => {
     const appendingValue = 'test';
     list.appendNode(appendingValue);
 
-    expect(list.head.next).not.toBeNull();
-    list.head.next && expect(list.head.next.value).toBe(appendingValue);
+    list.head && expect(list.head.next).not.toBeNull();
+    list.head && list.head.next && expect(list.head.next.value).toBe(appendingValue);
   });
 
   test('prepending node', () => {
@@ -43,8 +43,8 @@ describe('linked list', () => {
     const prependingValue = 'newhead';
     list.prependNode(prependingValue);
 
-    expect(list.head.next).not.toBeNull();
-    list.head.next && expect(list.head.next.value).toBe(value);
+    list.head && expect(list.head.next).not.toBeNull();
+    list.head && list.head.next && expect(list.head.next.value).toBe(value);
   });
 
   test('find node', () => {
@@ -79,7 +79,8 @@ describe('linked list', () => {
     list.appendNode('third');
     const lastNode = list.lastNode();
 
-    expect(lastNode.value).toBe('third');
+    expect(lastNode).not.toBeNull();
+    lastNode && expect(lastNode.value).toBe('third');
   });
 
   test('insert node between values', () => {
@@ -90,7 +91,7 @@ describe('linked list', () => {
     list.insertBetween('boom', undefined, undefined, 'second', 'third');
     const lastNode = list.lastNode();
 
-    expect(lastNode.prev && lastNode.prev.value).toBe('boom');
+    lastNode && expect(lastNode.prev && lastNode.prev.value).toBe('boom');
   });
 
   test('insert node between nodes', () => {
@@ -103,7 +104,7 @@ describe('linked list', () => {
     list.insertBetween('boom', secondNode, thirdNode);
     const lastNode = list.lastNode();
 
-    expect(lastNode.prev && lastNode.prev.value).toBe('boom');
+    lastNode && expect(lastNode.prev && lastNode.prev.value).toBe('boom');
   });
 
   test('insert node between nodes', () => {
@@ -112,9 +113,7 @@ describe('linked list', () => {
     list.insertBetween(1, node, node);
     const lastNode = list.lastNode();
 
-    console.log(list);
-
-    expect(lastNode.value).toBe(1);
+    lastNode && expect(lastNode.value).toBe(1);
   });
 
   test('make steps clockwise', () => {
@@ -150,7 +149,96 @@ describe('linked list', () => {
     expect(listStr).toBe('0,1,2');
   });
 
-  test('delete node', () => {
-    const list = new LinkedList();
+  test('delete head by node', () => {
+    const list = new LinkedList(0);
+    const node = list.findNode(0);
+
+    expect(node).toBeDefined();
+
+    list.deleteNode(node);
+
+    expect(list.head).toBeNull();
+    expect(list.tail).toBeNull();
+
+    list.appendNode(1);
+    list.appendNode(2);
+
+    const newHead = list.findNode(1);
+
+    expect(newHead).toBeDefined();
+
+    list.deleteNode(newHead);
+
+    expect(list.head).not.toBeNull();
+    list.head && expect(list.head.value).toBe(2);
+    list.tail && expect(list.tail.value).toBe(2);
+  });
+
+  test('delete tail by node', () => {
+    const list = new LinkedList(0);
+    list.appendNode(1);
+    list.appendNode(2);
+    const node = list.findNode(2);
+
+    expect(node).toBeDefined();
+
+    list.deleteNode(node);
+
+    list.tail && expect(list.tail.value).toBe(1);
+  });
+
+  test('delete node by node', () => {
+    const list = new LinkedList(0);
+    list.appendNode(1);
+    list.appendNode(2);
+    const node = list.findNode(1);
+
+    expect(node).toBeDefined();
+
+    list.deleteNode(node);
+
+    list.head && expect(list.head.value).toBe(0);
+    list.head && list.head.next && expect(list.head.next.value).toBe(2);
+    list.tail && expect(list.tail.value).toBe(2);
+  });
+
+  test('delete head by value', () => {
+    const list = new LinkedList(0);
+
+    list.deleteNode(undefined, 0);
+
+    expect(list.head).toBeNull();
+    expect(list.tail).toBeNull();
+
+    list.appendNode(1);
+    list.appendNode(2);
+
+    list.deleteNode(undefined, 1);
+
+    expect(list.head).not.toBeNull();
+    list.head && expect(list.head.value).toBe(2);
+    list.tail && expect(list.tail.value).toBe(2);
+  });
+
+  test('delete tail by value', () => {
+    const list = new LinkedList(0);
+    list.appendNode(1);
+    list.appendNode(2);
+
+    list.deleteNode(undefined, 2);
+
+    list.tail && expect(list.tail.value).toBe(1);
+  });
+
+  test('delete node by value', () => {
+    const list = new LinkedList(0);
+    list.appendNode(1);
+    list.appendNode(2);
+
+    list.deleteNode(undefined, 1);
+
+    list.head && expect(list.head.value).toBe(0);
+    list.head && list.head.next && expect(list.head.next.value).toBe(2);
+    list.tail && expect(list.tail.value).toBe(2);
   });
 });

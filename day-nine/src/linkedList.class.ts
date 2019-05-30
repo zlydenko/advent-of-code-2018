@@ -45,9 +45,10 @@ export default class LinkedList<T> {
   tail: ListNode<T> | null = null;
 
   constructor(head?: T) {
-    if (head) {
-      this.head = new ListNode<T>(head);
-      this.tail = this.head;
+    if (head !== undefined) {
+      const node = new ListNode<T>(head);
+      this.head = node;
+      this.tail = node;
     }
   }
 
@@ -106,36 +107,48 @@ export default class LinkedList<T> {
     return currentNode;
   }
 
-  insertBetween(value: T, nodeBefore?: ListNode<T>, nodeAfter?: ListNode<T>, valueBefore?: T, valueAfter?: T) {
+  insertBetween(value: T, nodeBefore?: ListNode<T>, nodeAfter?: ListNode<T>, valueBefore?: T, valueAfter?: T): LinkedList<T> {
     const newNode = new ListNode(value);
 
-    if ((nodeBefore && nodeBefore === nodeAfter) || (valueBefore && valueBefore === valueAfter)) {
-      const node = valueBefore ? this.findNode(valueBefore) : nodeBefore;
-
-      if (!node) {
-        throw new Error('oops');
-      }
+    if (nodeBefore && nodeAfter && nodeBefore === nodeAfter) {
+      const node = nodeBefore;
 
       newNode.setPrev(node);
       node.setNext(newNode);
       this.tail = newNode;
-    } else {
-      //? find value before and set to temp var
-      const beforeNode = valueBefore ? this.findNode(valueBefore) : nodeBefore;
-      //? find value after and set to temp var
-      const afterNode = valueAfter ? this.findNode(valueAfter) : nodeAfter;
 
-      if (beforeNode && afterNode) {
-        //? set after value to new node next
-        newNode.setNext(afterNode);
-        afterNode.setPrev(newNode);
-        //? set new node to before value next
-        beforeNode.setNext(newNode);
-        newNode.setPrev(beforeNode);
-      } else {
-        throw new Error('oops');
-      }
+      return this;
     }
+
+    if (valueBefore && valueAfter && valueBefore === valueAfter) {
+      const node = this.findNode(valueBefore);
+
+      if (node) {
+        newNode.setPrev(node);
+        node.setNext(newNode);
+        this.tail = newNode;
+      }
+
+      return this;
+    }
+
+    //? find value before and set to temp var
+    const beforeNode = valueBefore ? this.findNode(valueBefore) : nodeBefore;
+    //? find value after and set to temp var
+    const afterNode = valueAfter ? this.findNode(valueAfter) : nodeAfter;
+
+    if (beforeNode && afterNode) {
+      //? set after value to new node next
+      newNode.setNext(afterNode);
+      afterNode.setPrev(newNode);
+      //? set new node to before value next
+      beforeNode.setNext(newNode);
+      newNode.setPrev(beforeNode);
+    } else {
+      throw new Error('oops');
+    }
+
+    return this;
   }
 
   lastNode(): ListNode<T> | null {
@@ -190,17 +203,17 @@ export default class LinkedList<T> {
       throw new Error('empty list');
     }
 
-    if ((node && node === this.head) || (value && value === this.head.value)) {
+    if ((node !== undefined && node === this.head) || (value !== undefined && value === this.head.value)) {
       const nextNode = this.head.next;
 
-      if (!nextNode) {
+      if (nextNode === null) {
         this.head = null;
         this.tail = null;
       } else {
         nextNode.deletePrev();
         this.head = nextNode;
       }
-    } else if ((node && node === this.tail) || (value && value === this.tail.value)) {
+    } else if ((node !== undefined && node === this.tail) || (value !== undefined && value === this.tail.value)) {
       const prevNode = this.tail.prev;
 
       if (!prevNode) {
@@ -213,7 +226,7 @@ export default class LinkedList<T> {
     } else {
       const deleteNode = value ? this.findNode(value) : node;
 
-      if (deleteNode) {
+      if (deleteNode !== undefined) {
         const prevNode = deleteNode.prev;
         const nextNode = deleteNode.next;
 
