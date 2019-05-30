@@ -86,7 +86,7 @@ export default class LinkedList<T> {
     return this;
   }
 
-  findNode(value: T): ListNode<T> | undefined {
+  findNode(value: T): ListNode<T> {
     if (this.head && this.head.value === value) return this.head;
     if (this.tail && this.tail.value === value) return this.tail;
 
@@ -99,7 +99,7 @@ export default class LinkedList<T> {
         if (currentNode && currentNode.next !== null) {
           currentNode = currentNode.next;
         } else {
-          return undefined;
+          throw new Error('find no node');
         }
       }
     }
@@ -107,45 +107,38 @@ export default class LinkedList<T> {
     return currentNode;
   }
 
-  insertBetween(value: T, nodeBefore?: ListNode<T>, nodeAfter?: ListNode<T>, valueBefore?: T, valueAfter?: T): LinkedList<T> {
+  insertBetween(value: T, nodeBefore: ListNode<T>, nodeAfter: ListNode<T>): LinkedList<T> {
     const newNode = new ListNode(value);
 
-    if (nodeBefore && nodeAfter && nodeBefore === nodeAfter) {
-      const node = nodeBefore;
+    if (this.head !== null && this.tail !== null) {
+      if (nodeBefore === nodeAfter) {
+        const node = nodeBefore;
 
-      newNode.setPrev(node);
-      node.setNext(newNode);
-      this.tail = newNode;
-
-      return this;
-    }
-
-    if (valueBefore && valueAfter && valueBefore === valueAfter) {
-      const node = this.findNode(valueBefore);
-
-      if (node) {
         newNode.setPrev(node);
         node.setNext(newNode);
         this.tail = newNode;
+      } else {
+        if (nodeBefore === this.tail && nodeAfter === this.head) {
+          //? what if item placed between last and first nodes
+          //? this break all system
+          //? in this situation we just need to add item in the end
+
+          newNode.setPrev(this.tail);
+          this.tail.setNext(newNode);
+          this.tail = newNode;
+        } else if (nodeBefore.next !== nodeAfter) {
+          throw new Error('oops');
+        } else {
+          newNode.setNext(nodeAfter);
+          nodeAfter.setPrev(newNode);
+
+          nodeBefore.setNext(newNode);
+          newNode.setPrev(nodeBefore);
+        }
       }
-
-      return this;
-    }
-
-    //? find value before and set to temp var
-    const beforeNode = valueBefore ? this.findNode(valueBefore) : nodeBefore;
-    //? find value after and set to temp var
-    const afterNode = valueAfter ? this.findNode(valueAfter) : nodeAfter;
-
-    if (beforeNode && afterNode) {
-      //? set after value to new node next
-      newNode.setNext(afterNode);
-      afterNode.setPrev(newNode);
-      //? set new node to before value next
-      beforeNode.setNext(newNode);
-      newNode.setPrev(beforeNode);
     } else {
-      throw new Error('oops');
+      this.head = newNode;
+      this.tail = newNode;
     }
 
     return this;
