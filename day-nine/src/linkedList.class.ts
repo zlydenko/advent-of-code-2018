@@ -1,7 +1,3 @@
-/*
-  related: https://github.com/trekhleb/javascript-algorithms/blob/master/src/data-structures/doubly-linked-list/DoublyLinkedList.js
-*/
-
 export class ListNode<T> {
   prev: ListNode<T> | null = null;
   next: ListNode<T> | null = null;
@@ -99,7 +95,7 @@ export default class LinkedList<T> {
         if (currentNode && currentNode.next !== null) {
           currentNode = currentNode.next;
         } else {
-          throw new Error('find no node');
+          throw new Error("find no node");
         }
       }
     }
@@ -127,7 +123,7 @@ export default class LinkedList<T> {
           this.tail.setNext(newNode);
           this.tail = newNode;
         } else if (nodeBefore.next !== nodeAfter) {
-          throw new Error('oops');
+          throw new Error("oops");
         } else {
           newNode.setNext(nodeAfter);
           nodeAfter.setPrev(newNode);
@@ -151,9 +147,9 @@ export default class LinkedList<T> {
   makeStepsClockwise(value: T, stepsCount: number): ListNode<T> {
     const node = this.findNode(value);
 
-    if (!node) throw new Error('node not found');
+    if (!node) throw new Error("node not found");
 
-    if (!this.head || !this.tail) throw new Error('empty list');
+    if (!this.head || !this.tail) throw new Error("empty list");
 
     let currentNode = node;
     let steps = 0;
@@ -173,9 +169,9 @@ export default class LinkedList<T> {
   makeStepsCounterClockwise(value: T, stepsCount: number): ListNode<T> {
     const node = this.findNode(value);
 
-    if (!node) throw new Error('node not found');
+    if (!node) throw new Error("node not found");
 
-    if (!this.head || !this.tail) throw new Error('empty list');
+    if (!this.head || !this.tail) throw new Error("empty list");
 
     let currentNode = node;
     let steps = 0;
@@ -193,7 +189,7 @@ export default class LinkedList<T> {
 
   deleteNode(node?: ListNode<T>, value?: T): LinkedList<T> {
     if (!this.head || !this.tail) {
-      throw new Error('empty list');
+      throw new Error("empty list");
     }
 
     if ((node !== undefined && node === this.head) || (value !== undefined && value === this.head.value)) {
@@ -224,7 +220,7 @@ export default class LinkedList<T> {
         const nextNode = deleteNode.next;
 
         if (prevNode === null || nextNode === null) {
-          throw new Error('oops');
+          throw new Error("oops");
         } else {
           prevNode.setNext(nextNode);
           nextNode.setPrev(prevNode);
@@ -248,6 +244,6 @@ export default class LinkedList<T> {
   }
 
   toString(): string {
-    return this.toArray().join(',');
+    return this.toArray().join(",");
   }
 }

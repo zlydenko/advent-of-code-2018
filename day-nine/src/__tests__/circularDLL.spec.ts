@@ -1,25 +1,25 @@
-const CircularDoublyLinkedList = require('../circularDLL.class.js');
+const CircularDoublyLinkedList = require("../circularDLL.class.js");
 
-describe('circular doubly linked list', () => {
-  test('init start', () => {
-    const list = new CircularDoublyLinkedList(10);
+describe("circular doubly linked list", () => {
+  test("part one solution", () => {
+    const list = new CircularDoublyLinkedList(405, 71700);
 
-    console.log(list);
+    const output = list.play().highScore();
 
-    // list.appendAfterNthNode(2, 2);
-    // console.log(list);
-    // console.log(list.toArray());
+    expect(output).toBe(428690);
 
-    // list.appendAfterNthNode(2, 2);
-    // list.appendAfterNthNode(3, 2);
-    // list.appendAfterNthNode(4, 2);
-    // list.appendAfterNthNode(5, 2);
+    //? 26 ms
+  });
 
-    // for (let i = 2; i <= 20; i++) {
-    //   list.appendAfterNthNode(i, 1);
-    // }
+  test("part two solution", () => {
+    const greater = 71700 * 100;
 
-    // console.log(list.toArray());
-    // console.log(list);
+    const list = new CircularDoublyLinkedList(405, greater);
+
+    const output = list.play().highScore();
+
+    console.log(output);
+
+    //? 3454 ms
   });
 });
