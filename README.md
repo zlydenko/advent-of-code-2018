@@ -1,19 +1,19 @@
 # Advent of Code 2018
 
-## Current score 18🌟 (in progress)
+## Current score 18* (in progress)
 
 ## Solutions
 
-1. [Day 1: Chronal Calibration](day-one/README.md) 🌟🌟
-2. [Day 2: Inventory Management System](day-two/README.md) 🌟🌟
-3. [Day 3: No Matter How You Slice It](day-three/README.md)🌟🌟
-4. [Day 4: Repose Record](day-four/README.md)🌟🌟
-5. [Day 5: Alchemical Reduction](day-five/README.md)🌟🌟
-6. [Day 6: Chronal Coordinates](day-six/README.md)🌟🌟
-7. [Day 7: The Sum of Its Parts](day-seven/README.md)🌟🌟
-8. [Day 8: Memory Maneuver](day-eight/README.md)🌟🌟
-9. [Day 9: Marble Mania](day-nine/README.md)🌟🌟
-10. [Day 10: The Stars Align](day-ten/README.md)
+1. [Day 1: Chronal Calibration](day-one/) 🌟🌟
+2. [Day 2: Inventory Management System](day-two/) 🌟🌟
+3. [Day 3: No Matter How You Slice It](day-three/)🌟🌟
+4. [Day 4: Repose Record](day-four/)🌟🌟
+5. [Day 5: Alchemical Reduction](day-five/)🌟🌟
+6. [Day 6: Chronal Coordinates](day-six/)🌟🌟
+7. [Day 7: The Sum of Its Parts](day-seven/)🌟🌟
+8. [Day 8: Memory Maneuver](day-eight/)🌟🌟
+9. [Day 9: Marble Mania](day-nine/)🌟🌟
+10. [Day 10: The Stars Align](day-ten/)
 
 ## About
 
