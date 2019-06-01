@@ -1,12 +1,11 @@
+interface Location {
+  x: number;
+  y: number;
+}
+
 interface PointI {
-  position: {
-    x: number;
-    y: number;
-  };
-  velocity: {
-    x: number;
-    y: number;
-  };
+  position: Location;
+  velocity: Location;
 }
 
 const cleanInput = (str: string): number[] => {
@@ -36,4 +35,27 @@ export const parseInput = (data: string[]): PointI[] => {
       }
     };
   });
+};
+
+export const getBoundaries = (data: PointI[]) => {
+  return data.reduce(
+    (acc, val) => {
+      const {
+        position: { x, y }
+      } = val;
+
+      return {
+        maxPositiveX: acc.maxPositiveX > x ? acc.maxPositiveX : x,
+        maxNegativeX: acc.maxNegativeX < x ? acc.maxNegativeX : x,
+        maxPositiveY: acc.maxPositiveY > y ? acc.maxPositiveY : y,
+        maxNegativeY: acc.maxNegativeY < y ? acc.maxNegativeY : y
+      };
+    },
+    {
+      maxPositiveX: 0,
+      maxNegativeX: 0,
+      maxPositiveY: 0,
+      maxNegativeY: 0
+    }
+  );
 };

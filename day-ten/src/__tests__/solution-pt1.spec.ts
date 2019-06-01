@@ -1,4 +1,4 @@
-import { parseInput } from "../solution-pt1";
+import { parseInput, getBoundaries } from "../solution-pt1";
 
 describe("day 10, part 1", () => {
   const data = [
@@ -51,5 +51,14 @@ describe("day 10, part 1", () => {
     expect(output[0]).toEqual(expect.objectContaining(expected));
   });
 
-  // test("build initial points", () => {});
+  test("find boundaries", () => {
+    const parsedInput = parseInput(data);
+    const boundaries = getBoundaries(parsedInput);
+    const { maxPositiveX, maxNegativeX, maxPositiveY, maxNegativeY } = boundaries;
+
+    expect(maxPositiveX).toBe(15);
+    expect(maxNegativeX).toBe(-6);
+    expect(maxPositiveY).toBe(11);
+    expect(maxNegativeY).toBe(-4);
+  });
 });
