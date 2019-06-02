@@ -77,3 +77,42 @@ export const buildMatrix = (
 
   return cols;
 };
+
+export const secondsGenerator = function*(
+  seconds: number,
+  initialPoints: PointI[]
+): IterableIterator<{ currentSecond: number; points: PointI[] }> {
+  let currentSecond = 0;
+  let points = initialPoints;
+
+  while (currentSecond < seconds) {
+    points = points.map(({ position, velocity }) => {
+      return {
+        position: {
+          x: position.x + velocity.x,
+          y: position.y + velocity.y
+        },
+        velocity
+      };
+    });
+
+    yield {
+      currentSecond,
+      points
+    };
+
+    currentSecond++;
+  }
+};
+
+// export const movingPointsGenerator = function*(matrix: string[], points: PointI[], seconds: number): IterableIterator<any> {
+//   let cleanMatrix = matrix;
+//   let currentSecond = 0;
+
+//   while(currentSecond < seconds) {
+//     //todo: place points by the coordinates
+
+//     //?
+//     currentSecond++;
+//   }
+// };
