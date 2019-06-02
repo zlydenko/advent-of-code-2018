@@ -59,3 +59,21 @@ export const getBoundaries = (data: PointI[]) => {
     }
   );
 };
+
+export const buildMatrix = (
+  maxPositiveX: number,
+  maxNegativeX: number,
+  maxPositiveY: number,
+  maxNegativeY: number
+): string[] => {
+  const row: string = Array(-maxNegativeX + maxPositiveX + 1)
+    .fill(".")
+    .join("");
+  const cols: string[] = Array(-maxNegativeY + maxPositiveY + 1)
+    .fill(null)
+    .map(_ => {
+      return row;
+    });
+
+  return cols;
+};

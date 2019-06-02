@@ -1,4 +1,9 @@
-import { parseInput, getBoundaries } from "../solution-pt1";
+import {
+  parseInput,
+  getBoundaries,
+  buildMatrix
+  //sds
+} from "../solution-pt1";
 
 describe("day 10, part 1", () => {
   const data = [
@@ -60,5 +65,15 @@ describe("day 10, part 1", () => {
     expect(maxNegativeX).toBe(-6);
     expect(maxPositiveY).toBe(11);
     expect(maxNegativeY).toBe(-4);
+  });
+
+  test("build matrix", () => {
+    const parsedInput = parseInput(data);
+    const boundaries = getBoundaries(parsedInput);
+    const { maxPositiveX, maxNegativeX, maxPositiveY, maxNegativeY } = boundaries;
+    const output = buildMatrix(maxPositiveX, maxNegativeX, maxPositiveY, maxNegativeY);
+
+    expect(output).toHaveLength(16);
+    expect(output[0]).toHaveLength(22);
   });
 });
