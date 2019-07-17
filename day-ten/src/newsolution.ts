@@ -38,12 +38,20 @@ class Point {
   }
 }
 
-interface Size {
+type Size = {
   width: number;
   height: number;
+};
+
+interface SkyI {
+  points: Point[];
+  currentTime: number;
+  size: Size;
+  nextTick(): void;
+  display(): void;
 }
 
-class Sky {
+class Sky implements SkyI {
   points: Point[];
   currentTime: number = 0;
   size: Size;
@@ -63,6 +71,9 @@ class Sky {
   }
 
   display(): void {
+    /**
+     * ne dopisano
+     */
     let result = [];
     for (let i = 0; i < this.size.height; i++) {
       let row = [];
