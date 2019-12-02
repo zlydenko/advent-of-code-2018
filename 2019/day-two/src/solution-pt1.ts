@@ -66,7 +66,7 @@ const intcodeComputer = (input: number[]): number[] => {
     currentPosition = newPosition;
   }
 
-  console.log("PROGRAM FINISHED");
+  // console.log("PROGRAM FINISHED");
   return program;
 };
 
@@ -97,17 +97,27 @@ assert.deepStrictEqual(results[4], intcodeComputer(tests[4]));
 
 */
 
-const restoreGravityAssistProgram = (input: number[]): number[] => [...input.slice(0, 1), 12, 2, ...input.slice(3)];
+const restoreGravityAssistProgram = (input: number[], value1: number, value2: number): number[] => [
+  ...input.slice(0, 1),
+  value1,
+  value2,
+  ...input.slice(3)
+];
 
-(async function() {
-  try {
-    const input = await readInputPt1();
-    const restoredGravityAssistProgram = restoreGravityAssistProgram(input);
-    const program = intcodeComputer(restoredGravityAssistProgram);
-    const solution = program[0];
+// (async function() {
+//   try {
+//     const input = await readInputPt1();
+//     const restoredGravityAssistProgram = restoreGravityAssistProgram(input, 12, 2);
+//     const program = intcodeComputer(restoredGravityAssistProgram);
+//     const solution = program[0];
 
-    console.log(`SOLUTION: ${solution}`);
-  } catch (error) {
-    console.error(error);
-  }
-})();
+//     console.log(`SOLUTION: ${solution}`);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// })();
+
+module.exports = {
+  intcodeComputer,
+  restoreGravityAssistProgram
+};
