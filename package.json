@@ -6,8 +6,8 @@
   "scripts": {
     "ts:w": "tsc -w",
     "ts:build": "tsc",
-    "start": "npm run ts:build && node -r esm day-nine/src/solution-pt1.js",
-    "test": "jest day-nine/src/__tests__/circularDLL.spec.ts",
+    "start": "npm run ts:build && node -r esm day-ten/src/solution-pt1.js",
+    "test": "jest day-ten/src/__tests__/solution-pt1.spec.ts",
     "postinstall": "link-module-alias",
     "preinstall": "command -v link-module-alias && link-module-alias clean || true"
   },
